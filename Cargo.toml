@@ -1,0 +1,23 @@
+[package]
+name = "piston_rspy"
+description = "Python bindings for piston_rs."
+version = "0.1.0"
+edition = "2021"
+authors = ["Jonxslays"]
+readme = "README.md"
+license = "MIT"
+homepage = "https://github.com/Jonxslays/piston_rspy"
+repository = "https://github.com/Jonxslays/piston_rspy"
+documentation = "https://github.com/Jonxslays/piston_rspy"
+keywords = ["piston-rs", "piston", "emkc", "code"]
+categories = ["api-bindings", "asynchronous", "ffi"]
+
+[lib]
+name = "piston_rs"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.14", features = ["extension-module"] }
+pyo3-asyncio = { version = "0.14", features = ["tokio-runtime"] }
+tokio = { version = "1" }
+piston_rs = "^0.2"
