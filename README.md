@@ -1,4 +1,4 @@
-# piston_rs
+# piston_rspy
 
 Python bindings for [`piston_rs`](https://github.com/Jonxslays/piston_rs).
 
