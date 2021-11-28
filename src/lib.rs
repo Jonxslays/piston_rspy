@@ -4,13 +4,12 @@ mod client;
 mod executor;
 mod models;
 
-use client::*;
-use executor::*;
-use models::*;
-
 #[pymodule]
-fn piston_rspy(_py: Python, m: &PyModule) -> PyResult<()> {
-    m.add_class::<Runtime>()?;
-    m.add_class::<File>()?;
+pub fn piston_rspy(_py: Python, m: &PyModule) -> PyResult<()> {
+    m.add_class::<models::Runtime>()?;
+    m.add_class::<models::File>()?;
+    m.add_class::<executor::ExecResult>()?;
+    m.add_class::<executor::ExecResponse>()?;
+    m.add_class::<executor::Executor>()?;
     Ok(())
 }
