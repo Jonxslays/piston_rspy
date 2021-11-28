@@ -13,11 +13,12 @@ keywords = ["piston-rs", "piston", "emkc", "code"]
 categories = ["api-bindings", "asynchronous", "ffi"]
 
 [lib]
-name = "piston_rs"
+name = "piston_rspy"
 crate-type = ["cdylib"]
 
 [dependencies]
 pyo3 = { version = "0.14", features = ["extension-module"] }
 pyo3-asyncio = { version = "0.14", features = ["tokio-runtime"] }
+serde = { version = "1", features = ["derive"] }
 tokio = { version = "1" }
 piston_rs = "^0.2"

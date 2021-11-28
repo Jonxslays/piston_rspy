@@ -647,6 +647,7 @@ dependencies = [
  "piston_rs",
  "pyo3",
  "pyo3-asyncio",
+ "serde",
  "tokio",
 ]
 
