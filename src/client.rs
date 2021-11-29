@@ -1,5 +1,5 @@
 use pyo3::prelude::*;
-use pyo3::types::PyType;
+use pyo3::PyObjectProtocol;
 use std::collections::HashMap;
 
 use piston_rs::Client as Client_;
@@ -13,6 +13,21 @@ use super::Runtime;
 pub struct Client {
     inner: Client_,
     headers: HashMap<String, String>,
+}
+
+#[pyproto]
+impl PyObjectProtocol for Client {
+    fn __repr__(&self) -> PyResult<String> {
+        Ok(format!(
+            "Client {{ url: \"{}\", headers: {:?} }}",
+            self.url(),
+            self.headers,
+        ))
+    }
+
+    fn __str__(&self) -> PyResult<String> {
+        self.__repr__()
+    }
 }
 
 #[pymethods]
@@ -44,6 +59,11 @@ impl Client {
     #[getter]
     fn url(&self) -> String {
         self.inner.get_url()
+    }
+
+    #[pyo3(text_signature = "($self) -> str")]
+    fn get_url(&self) -> String {
+        self.url()
     }
 
     #[getter]
