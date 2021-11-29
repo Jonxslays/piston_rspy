@@ -6,7 +6,7 @@ use piston_rs::ExecResponse as ExecResponse_;
 use piston_rs::ExecResult as ExecResult_;
 use piston_rs::Executor as Executor_;
 
-use super::models::File;
+use super::File;
 
 #[pyclass]
 #[derive(Clone)]
