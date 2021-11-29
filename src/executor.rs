@@ -83,13 +83,11 @@ impl ExecResult {
         self.inner.signal.clone()
     }
 
-    /// True if there was a zero status code returned from execution.
     #[pyo3(text_signature = "($self) -> bool")]
     fn is_ok(&self) -> bool {
         self.inner.is_ok()
     }
 
-    /// True if there was a non zero status code returned from execution.
     #[pyo3(text_signature = "($self) -> bool")]
     fn is_err(&self) -> bool {
         self.inner.is_err()
@@ -140,13 +138,11 @@ impl ExecResponse {
         self.inner.compile.as_ref().map(ExecResult::from_inner)
     }
 
-    /// True if there was a non zero status code returned from execution.
     #[pyo3(text_signature = "($self) -> bool")]
     fn is_ok(&self) -> bool {
         self.inner.is_ok()
     }
 
-    /// True if there was a non zero status code returned from execution.
     #[pyo3(text_signature = "($self) -> bool")]
     fn is_err(&self) -> bool {
         self.inner.is_err()

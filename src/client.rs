@@ -10,6 +10,7 @@ use super::Executor;
 use super::Runtime;
 
 #[pyclass]
+#[pyo3(text_signature = "() -> Client")]
 pub struct Client {
     inner: Client_,
     headers: HashMap<String, String>,
@@ -45,6 +46,7 @@ impl Client {
     }
 
     #[staticmethod]
+    #[pyo3(text_signature = "(key: str) -> Client")]
     fn with_key(key: String) -> Self {
         let inner = Client_::with_key(&key);
         let headers = inner
