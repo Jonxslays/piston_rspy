@@ -49,6 +49,11 @@ impl Runtime {
     fn aliases(&self) -> Vec<String> {
         self.inner.aliases.clone()
     }
+
+    #[pyo3(text_signature = "($self) -> Runtime")]
+    fn copy(&self) -> Self {
+        self.clone()
+    }
 }
 
 #[pyclass]
@@ -139,27 +144,20 @@ impl File {
     }
 
     #[pyo3(text_signature = "($self, name: str, /) -> $self")]
-    fn set_name<'a>(mut slf: PyRefMut<'a, Self>, _py: Python, name: String) -> PyRefMut<'a, Self> {
+    fn set_name<'a>(mut slf: PyRefMut<'a, Self>, name: String) -> PyRefMut<'a, Self> {
         slf.inner.name = name;
         slf
     }
 
     #[pyo3(text_signature = "($self, content: str, /) -> $self")]
     fn set_content<'a>(
-        mut slf: PyRefMut<'a, Self>,
-        _py: Python,
-        content: String,
-    ) -> PyRefMut<'a, Self> {
+        mut slf: PyRefMut<'a, Self>, content: String) -> PyRefMut<'a, Self> {
         slf.inner.content = content;
         slf
     }
 
     #[pyo3(text_signature = "($self, encoding: str, /) -> $self")]
-    fn set_encoding<'a>(
-        mut slf: PyRefMut<'a, Self>,
-        _py: Python,
-        encoding: String,
-    ) -> PyRefMut<'a, Self> {
+    fn set_encoding<'a>(mut slf: PyRefMut<'a, Self>, encoding: String) -> PyRefMut<'a, Self> {
         slf.inner.encoding = encoding;
         slf
     }
