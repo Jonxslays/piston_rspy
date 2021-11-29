@@ -144,20 +144,19 @@ impl File {
     }
 
     #[pyo3(text_signature = "($self, name: str, /) -> $self")]
-    fn set_name<'a>(mut slf: PyRefMut<'a, Self>, name: String) -> PyRefMut<'a, Self> {
+    fn set_name(mut slf: PyRefMut<Self>, name: String) -> PyRefMut<Self> {
         slf.inner.name = name;
         slf
     }
 
     #[pyo3(text_signature = "($self, content: str, /) -> $self")]
-    fn set_content<'a>(
-        mut slf: PyRefMut<'a, Self>, content: String) -> PyRefMut<'a, Self> {
+    fn set_content(mut slf: PyRefMut<Self>, content: String) -> PyRefMut<Self> {
         slf.inner.content = content;
         slf
     }
 
     #[pyo3(text_signature = "($self, encoding: str, /) -> $self")]
-    fn set_encoding<'a>(mut slf: PyRefMut<'a, Self>, encoding: String) -> PyRefMut<'a, Self> {
+    fn set_encoding(mut slf: PyRefMut<Self>, encoding: String) -> PyRefMut<Self> {
         slf.inner.encoding = encoding;
         slf
     }

@@ -137,11 +137,10 @@ impl ExecResponse {
 
     #[getter]
     fn compile(&self) -> Option<ExecResult> {
-        if let Some(compile) = &self.inner.compile {
-            Some(ExecResult::from_inner(compile))
-        } else {
-            None
-        }
+        self.inner
+            .compile
+            .as_ref()
+            .map(ExecResult::from_inner)
     }
 
     /// True if there was a non zero status code returned from execution.
@@ -189,6 +188,7 @@ impl Executor {
         compile_memory_limit = "-1",
         run_memory_limit = "-1"
     )]
+    #[allow(clippy::too_many_arguments)]
     fn new(
         language: String,
         version: String,
@@ -243,7 +243,7 @@ impl Executor {
             .files
             .clone()
             .iter()
-            .map(|f| File::from_inner(f))
+            .map(File::from_inner)
             .collect()
     }
 
@@ -331,25 +331,25 @@ impl Executor {
     }
 
     #[pyo3(text_signature = "($self, language: str, /) -> $self")]
-    fn set_language<'a>(mut slf: PyRefMut<'a, Self>, language: String) -> PyRefMut<'a, Self> {
+    fn set_language(mut slf: PyRefMut<Self>, language: String) -> PyRefMut<Self> {
         slf.inner.language = language;
         slf
     }
 
     #[pyo3(text_signature = "($self, version: str, /) -> $self")]
-    fn set_version<'a>(mut slf: PyRefMut<'a, Self>, version: String) -> PyRefMut<'a, Self> {
+    fn set_version(mut slf: PyRefMut<Self>, version: String) -> PyRefMut<Self> {
         slf.inner.version = version;
         slf
     }
 
     #[pyo3(text_signature = "($self, file: File, /) -> $self")]
-    fn add_file<'a>(mut slf: PyRefMut<'a, Self>, file: File) -> PyRefMut<'a, Self> {
+    fn add_file(mut slf: PyRefMut<Self>, file: File) -> PyRefMut<Self> {
         slf.inner.files.push(file.convert());
         slf
     }
 
     #[pyo3(text_signature = "($self, files: list[File], /) -> $self")]
-    fn add_files<'a>(mut slf: PyRefMut<'a, Self>, files: Vec<File>) -> PyRefMut<'a, Self> {
+    fn add_files(mut slf: PyRefMut<Self>, files: Vec<File>) -> PyRefMut<Self> {
         slf.inner.files.extend(files.iter().map(|f| f.convert()));
         slf
     }
@@ -360,19 +360,19 @@ impl Executor {
     }
 
     #[pyo3(text_signature = "($self, stdin: str, /) -> $self")]
-    fn set_stdin<'a>(mut slf: PyRefMut<'a, Self>, stdin: String) -> PyRefMut<'a, Self> {
+    fn set_stdin(mut slf: PyRefMut<Self>, stdin: String) -> PyRefMut<Self> {
         slf.inner.stdin = stdin;
         slf
     }
 
     #[pyo3(text_signature = "($self, arg: str, /) -> $self")]
-    fn add_arg<'a>(mut slf: PyRefMut<'a, Self>, arg: String) -> PyRefMut<'a, Self> {
+    fn add_arg(mut slf: PyRefMut<Self>, arg: String) -> PyRefMut<Self> {
         slf.inner.args.push(arg);
         slf
     }
 
     #[pyo3(text_signature = "($self, args: str, /) -> $self")]
-    fn add_args<'a>(mut slf: PyRefMut<'a, Self>, args: Vec<String>) -> PyRefMut<'a, Self> {
+    fn add_args(mut slf: PyRefMut<Self>, args: Vec<String>) -> PyRefMut<Self> {
         slf.inner.args.extend(args);
         slf
     }
@@ -383,25 +383,25 @@ impl Executor {
     }
 
     #[pyo3(text_signature = "($self, timeout: int, /) -> $self")]
-    fn set_compile_timeout<'a>(mut slf: PyRefMut<'a, Self>, timeout: isize) -> PyRefMut<'a, Self> {
+    fn set_compile_timeout(mut slf: PyRefMut<Self>, timeout: isize) -> PyRefMut<Self> {
         slf.inner.compile_timeout = timeout;
         slf
     }
 
     #[pyo3(text_signature = "($self, timeout: int, /) -> $self")]
-    fn set_run_timeout<'a>(mut slf: PyRefMut<'a, Self>, timeout: isize) -> PyRefMut<'a, Self> {
+    fn set_run_timeout(mut slf: PyRefMut<Self>, timeout: isize) -> PyRefMut<Self> {
         slf.inner.run_timeout = timeout;
         slf
     }
 
     #[pyo3(text_signature = "($self, limit: int, /) -> $self")]
-    fn set_compile_memory_limit<'a>(mut slf: PyRefMut<'a, Self>, limit: isize) -> PyRefMut<'a, Self> {
+    fn set_compile_memory_limit(mut slf: PyRefMut<Self>, limit: isize) -> PyRefMut<Self> {
         slf.inner.compile_memory_limit = limit;
         slf
     }
 
     #[pyo3(text_signature = "($self, limit: int, /) -> $self")]
-    fn set_run_memory_limit<'a>(mut slf: PyRefMut<'a, Self>, limit: isize) -> PyRefMut<'a, Self> {
+    fn set_run_memory_limit(mut slf: PyRefMut<Self>, limit: isize) -> PyRefMut<Self> {
         slf.inner.run_memory_limit = limit;
         slf
     }
