@@ -137,10 +137,7 @@ impl ExecResponse {
 
     #[getter]
     fn compile(&self) -> Option<ExecResult> {
-        self.inner
-            .compile
-            .as_ref()
-            .map(ExecResult::from_inner)
+        self.inner.compile.as_ref().map(ExecResult::from_inner)
     }
 
     /// True if there was a non zero status code returned from execution.
