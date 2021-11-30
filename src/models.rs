@@ -4,6 +4,25 @@ use pyo3::PyObjectProtocol;
 use piston_rs::File as File_;
 use piston_rs::Runtime as Runtime_;
 
+/// A runtime available to be used by Piston.
+///
+/// ### Args:
+///
+/// - language: `str`
+/// The language.
+///
+/// - version: `str`
+/// The version of the language.
+///
+/// - aliases: `list[str]`
+/// The aliases associated with this runtime.
+///
+/// ##### Note
+///
+/// Runtimes are not meant to be created manually. Instead, they
+/// should be fetched from Piston using `Client.fetch_runtimes` and
+/// stored. The Python bindings for `piston_rs` do allow you to
+/// instantiate the class, however.
 #[pyclass]
 #[pyo3(text_signature = "(language: str, version: str, aliases: list[str], /) -> Runtime")]
 #[derive(Clone)]
@@ -28,6 +47,7 @@ impl PyObjectProtocol for Runtime {
     }
 }
 
+
 #[pymethods]
 impl Runtime {
     #[new]
@@ -41,21 +61,29 @@ impl Runtime {
         }
     }
 
+    /// The language.
     #[getter]
     fn language(&self) -> String {
         self.inner.language.clone()
     }
 
+    /// The version of the language.
     #[getter]
     fn version(&self) -> String {
         self.inner.version.clone()
     }
 
+    /// The aliases associated with this runtime.
     #[getter]
     fn aliases(&self) -> Vec<String> {
         self.inner.aliases.clone()
     }
 
+    /// Copies the runtime, leaving the existing one unchanged.
+    ///
+    /// ### Returns:
+    ///
+    /// `Runtime`: The new runtime.
     #[pyo3(text_signature = "($self) -> Runtime")]
     fn copy(&self) -> Self {
         self.clone()
@@ -121,8 +149,7 @@ impl File {
         self.inner.name.clone()
     }
 
-    #[setter]
-    #[pyo3(name = "name")]
+    #[setter(name)]
     fn name_setter(&mut self, name: String) {
         self.inner.name = name;
     }
@@ -132,8 +159,7 @@ impl File {
         self.inner.content.clone()
     }
 
-    #[setter]
-    #[pyo3(name = "content")]
+    #[setter(content)]
     fn content_setter(&mut self, content: String) {
         self.inner.content = content;
     }
@@ -143,8 +169,7 @@ impl File {
         self.inner.encoding.clone()
     }
 
-    #[setter]
-    #[pyo3(name = "encoding")]
+    #[setter(encoding)]
     fn encoding_setter(&mut self, encoding: String) {
         self.inner.encoding = encoding;
     }

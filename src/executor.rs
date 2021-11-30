@@ -225,8 +225,7 @@ impl Executor {
         self.inner.language.clone()
     }
 
-    #[setter]
-    #[pyo3(name = "language")]
+    #[setter(language)]
     fn language_setter(&mut self, language: String) {
         self.inner.language = language;
     }
@@ -236,8 +235,7 @@ impl Executor {
         self.inner.version.clone()
     }
 
-    #[setter]
-    #[pyo3(name = "version")]
+    #[setter(version)]
     fn version_setter(&mut self, version: String) {
         self.inner.version = version;
     }
@@ -252,8 +250,7 @@ impl Executor {
             .collect()
     }
 
-    #[setter]
-    #[pyo3(name = "files")]
+    #[setter(files)]
     fn files_setter(&mut self, files: Vec<File>) {
         self.inner
             .set_files(files.iter().map(|f| f.convert()).collect());
@@ -264,8 +261,7 @@ impl Executor {
         self.inner.stdin.clone()
     }
 
-    #[setter]
-    #[pyo3(name = "stdin")]
+    #[setter(stdin)]
     fn stdin_setter(&mut self, stdin: String) {
         self.inner.stdin = stdin;
     }
@@ -275,8 +271,7 @@ impl Executor {
         self.inner.args.clone()
     }
 
-    #[setter]
-    #[pyo3(name = "args")]
+    #[setter(args)]
     fn args_setter(&mut self, args: Vec<String>) {
         self.inner.args = args;
     }
@@ -286,8 +281,7 @@ impl Executor {
         self.inner.compile_timeout
     }
 
-    #[setter]
-    #[pyo3(name = "compile_timeout")]
+    #[setter(compile_timeout)]
     fn compile_timeout_setter(&mut self, timeout: isize) {
         self.inner.compile_timeout = timeout;
     }
@@ -297,8 +291,7 @@ impl Executor {
         self.inner.compile_timeout
     }
 
-    #[setter]
-    #[pyo3(name = "run_timeout")]
+    #[setter(run_timeout)]
     fn run_timeout_setter(&mut self, timeout: isize) {
         self.inner.run_timeout = timeout;
     }
@@ -308,8 +301,7 @@ impl Executor {
         self.inner.compile_memory_limit
     }
 
-    #[setter]
-    #[pyo3(name = "compile_memory_limit")]
+    #[setter(compile_memory_limit)]
     fn compile_memory_limit_setter(&mut self, limit: isize) {
         self.inner.compile_memory_limit = limit;
     }
@@ -319,8 +311,7 @@ impl Executor {
         self.inner.run_memory_limit
     }
 
-    #[setter]
-    #[pyo3(name = "run_memory_limit")]
+    #[setter(run_memory_limit)]
     fn run_memory_limit_setter(&mut self, limit: isize) {
         self.inner.run_memory_limit = limit;
     }
