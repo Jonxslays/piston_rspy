@@ -632,9 +632,9 @@ checksum = "8b870d8c151b6f2fb93e84a13146138f05d02ed11c7e7c54f8826aaaf7c9f184"
 
 [[package]]
 name = "piston_rs"
-version = "0.2.2"
+version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e5626610e4326db8d07b04bd3a989dfec122648edadc1c2aecd0f9662494c703"
+checksum = "e64e418c214724f6176e634359e6473e5eff2a172ab6374b2f0944a0047a331f"
 dependencies = [
  "reqwest",
  "serde",
