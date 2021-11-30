@@ -22,6 +22,7 @@ classifiers = [
 
 [tool.pyright]
 typeCheckingMode = "strict"
+include = ["piston_rspy.pyi"]
 
 [tool.black]
 line-length = 99
