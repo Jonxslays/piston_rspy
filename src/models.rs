@@ -11,6 +11,12 @@ pub struct Runtime {
     inner: Runtime_,
 }
 
+impl Runtime {
+    pub fn from_runtime(runtime: Runtime_) -> Self {
+        Self { inner: runtime }
+    }
+}
+
 #[pyproto]
 impl PyObjectProtocol for Runtime {
     fn __repr__(&self) -> PyResult<String> {

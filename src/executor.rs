@@ -44,7 +44,7 @@ impl ExecResult {
         }
     }
 
-    pub fn from_inner(result: &ExecResult_) -> Self {
+    pub fn from_result(result: &ExecResult_) -> Self {
         Self {
             inner: result.clone(),
         }
@@ -100,6 +100,12 @@ pub struct ExecResponse {
     inner: ExecResponse_,
 }
 
+impl ExecResponse {
+    pub fn from_response(response: ExecResponse_) -> Self {
+        Self { inner: response }
+    }
+}
+
 #[pyproto]
 impl PyObjectProtocol for ExecResponse {
     fn __repr__(&self) -> PyResult<String> {
@@ -130,12 +136,12 @@ impl ExecResponse {
 
     #[getter]
     fn run(&self) -> ExecResult {
-        ExecResult::from_inner(&self.inner.run)
+        ExecResult::from_result(&self.inner.run)
     }
 
     #[getter]
     fn compile(&self) -> Option<ExecResult> {
-        self.inner.compile.as_ref().map(ExecResult::from_inner)
+        self.inner.compile.as_ref().map(ExecResult::from_result)
     }
 
     #[pyo3(text_signature = "($self) -> bool")]
@@ -154,6 +160,12 @@ impl ExecResponse {
 #[derive(Clone)]
 pub struct Executor {
     inner: Executor_,
+}
+
+impl Executor {
+    pub fn convert(&self) -> Executor_ {
+        self.inner.clone()
+    }
 }
 
 #[pyproto]
