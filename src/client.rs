@@ -9,9 +9,13 @@ use super::ExecResponse;
 use super::Executor;
 use super::Runtime;
 
+/// A client used to send requests to Piston.
+///
+/// ### Returns:
+/// - `Client`: The new client.
 #[pyclass]
-#[pyo3(text_signature = "() -> Client")]
 #[derive(Clone)]
+#[pyo3(text_signature = "() -> Client")]
 pub struct Client {
     inner: Client_,
     headers: HashMap<String, String>,
@@ -46,8 +50,18 @@ impl Client {
         Self { inner, headers }
     }
 
+    /// Creates a new client, with an api key.
+    ///
+    /// ### Args:
+    ///
+    /// - key `str`:
+    /// The api key to use.
+    ///
+    /// ### Returns:
+    ///
+    /// - `Client`: The new client.
     #[staticmethod]
-    #[pyo3(text_signature = "(key: str) -> Client")]
+    #[pyo3(text_signature = "(key: str, /) -> Client")]
     fn with_key(key: String) -> Self {
         let inner = Client_::with_key(&key);
         let headers = inner
@@ -59,27 +73,50 @@ impl Client {
         Self { inner, headers }
     }
 
+    /// `str`: The base url for the Piston v2 api.
     #[getter]
     fn url(&self) -> String {
         self.inner.get_url()
     }
 
-    #[pyo3(text_signature = "($self) -> str")]
+    /// The base url for the Piston v2 api.
+    /// **NOTE**: The url is immutable.
+    ///
+    /// ### Returns:
+    ///
+    /// - `str`: The url.
+    #[pyo3(text_signature = "(self) -> str")]
     fn get_url(&self) -> String {
         self.url()
     }
 
+    /// `dict[str, str]`: The headers being sent with requests.
     #[getter]
     fn headers(&self) -> HashMap<String, String> {
         self.headers.clone()
     }
 
-    #[pyo3(text_signature = "($self) -> dict[str, str]")]
+    /// The headers being sent with requests.
+    /// **NOTE**: The headers are immutable.
+    ///
+    /// ### Returns:
+    ///
+    /// - `dict[str, str]`: The headers.
+    #[pyo3(text_signature = "(self) -> dict[str, str]")]
     fn get_headers(&self) -> HashMap<String, String> {
         self.headers()
     }
 
-    #[pyo3(text_signature = "($self) -> list[Runtime]")]
+    /// **CORO**: Fetches the runtimes from Piston. This is an http request.
+    ///
+    /// ### Returns:
+    ///
+    /// - `list[Runtime]`: The available Piston runtimes.
+    ///
+    /// ### Raises:
+    ///
+    /// - `FailedRequest`: If the request to Piston failed.
+    #[pyo3(text_signature = "(self) -> list[Runtime]")]
     fn fetch_runtimes<'a>(&self, py: Python<'a>) -> PyResult<&'a PyAny> {
         let client = self.inner.clone();
 
@@ -101,7 +138,21 @@ impl Client {
         })
     }
 
-    #[pyo3(text_signature = "($self, executor: Executor, /) -> ExecResponse | str")]
+    /// **CORO**: Executes code using a given executor. This is an http request.
+    ///
+    /// ### Args:
+    ///
+    /// - executor `Executor`:
+    /// The executor to use for the request.
+    ///
+    /// ### Returns:
+    ///
+    /// - `ExecResponse`: The response from Piston.
+    ///
+    /// ### Raises:
+    ///
+    /// - `FailedRequest`: If the request to Piston failed.
+    #[pyo3(text_signature = "(self, executor: Executor, /) -> ExecResponse")]
     fn execute<'a>(&self, py: Python<'a>, executor: &Executor) -> PyResult<&'a PyAny> {
         let client = self.inner.clone();
         let exec = executor.convert();

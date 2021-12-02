@@ -103,10 +103,10 @@ impl Runtime {
 /// - encoding `str`:
 /// The encoding of the file. Defaults to "utf8".
 #[pyclass]
+#[derive(Clone)]
 #[pyo3(
     text_signature = "(name: str = \"\", content: str = \"\", encoding: str = \"utf8\", /) -> File"
 )]
-#[derive(Clone)]
 pub struct File {
     inner: File_,
 }
