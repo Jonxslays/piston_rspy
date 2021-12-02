@@ -39,7 +39,7 @@ class Runtime:
         """Copies the runtime, leaving the existing one unchanged.
 
         Returns:
-            `Runtime`: The new runtime.
+            `Runtime`: A copy of the runtime.
         """
         ...
 
@@ -96,7 +96,7 @@ class File:
         """Copies the file, leaving the existing one unchanged.
 
         Returns:
-            `File`: The new file.
+            `File`: A copy of the file.
         """
         ...
 

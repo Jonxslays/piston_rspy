@@ -8,29 +8,30 @@ use piston_rs::Runtime as Runtime_;
 ///
 /// ### Args:
 ///
-/// - language: `str`
+/// - language `str`:
 /// The language.
 ///
-/// - version: `str`
+/// - version `str`:
 /// The version of the language.
 ///
-/// - aliases: `list[str]`
+/// - aliases `list[str]`:
 /// The aliases associated with this runtime.
 ///
-/// ##### Note
+/// ### Note:
 ///
-/// Runtimes are not meant to be created manually. Instead, they
-/// should be fetched from Piston using `Client.fetch_runtimes` and
-/// stored. The Python bindings for `piston_rs` do allow you to
-/// instantiate the class, however.
+/// >>Runtimes are not meant to be created manually. Instead, they
+/// >>should be fetched from Piston using `Client.fetch_runtimes` and
+/// >>stored. The Python bindings for `piston_rs` do allow you to
+/// >>instantiate the class, however.
 #[pyclass]
-#[pyo3(text_signature = "(language: str, version: str, aliases: list[str], /) -> Runtime")]
 #[derive(Clone)]
+#[pyo3(text_signature = "(language: str, version: str, aliases: list[str], /) -> Runtime")]
 pub struct Runtime {
     inner: Runtime_,
 }
 
 impl Runtime {
+    /// Generates a new `Runtime` from a `piston_rs.Runtime`.
     pub fn from_runtime(runtime: Runtime_) -> Self {
         Self { inner: runtime }
     }
@@ -47,7 +48,6 @@ impl PyObjectProtocol for Runtime {
     }
 }
 
-
 #[pymethods]
 impl Runtime {
     #[new]
@@ -61,19 +61,19 @@ impl Runtime {
         }
     }
 
-    /// The language.
+    /// `str`: The language.
     #[getter]
     fn language(&self) -> String {
         self.inner.language.clone()
     }
 
-    /// The version of the language.
+    /// `str`: The version of the language.
     #[getter]
     fn version(&self) -> String {
         self.inner.version.clone()
     }
 
-    /// The aliases associated with this runtime.
+    /// `list[str]`: The aliases of the language.
     #[getter]
     fn aliases(&self) -> Vec<String> {
         self.inner.aliases.clone()
@@ -83,13 +83,25 @@ impl Runtime {
     ///
     /// ### Returns:
     ///
-    /// `Runtime`: The new runtime.
-    #[pyo3(text_signature = "($self) -> Runtime")]
+    /// - `Runtime`: A copy of the runtime.
+    #[pyo3(text_signature = "(self) -> Runtime")]
     fn copy(&self) -> Self {
         self.clone()
     }
 }
 
+/// A file that contains the source code to be executed.
+///
+/// ### Args:
+///
+/// - name `str`:
+/// The name of the file. Defaults to "".
+///
+/// - content `str`:
+/// **Required by Piston** The content of the file. Defaults to "".
+///
+/// - encoding `str`:
+/// The encoding of the file. Defaults to "utf8".
 #[pyclass]
 #[pyo3(
     text_signature = "(name: str = \"\", content: str = \"\", encoding: str = \"utf8\", /) -> File"
@@ -111,12 +123,14 @@ impl PyObjectProtocol for File {
 }
 
 impl File {
+    /// Generates a new `File` from the inner `piston_rs.File`.
     pub fn from_inner(inner: &File_) -> Self {
         Self {
             inner: inner.clone(),
         }
     }
 
+    /// Converts the `File` into a `piston_rs.File`.
     pub fn convert(&self) -> File_ {
         File_ {
             name: self.inner.name.to_string(),
@@ -144,6 +158,7 @@ impl File {
         }
     }
 
+    /// `str`: The name of the file.
     #[getter]
     fn name(&self) -> String {
         self.inner.name.clone()
@@ -154,6 +169,7 @@ impl File {
         self.inner.name = name;
     }
 
+    /// `str`: The content of the file.
     #[getter]
     fn content(&self) -> String {
         self.inner.content.clone()
@@ -164,6 +180,7 @@ impl File {
         self.inner.content = content;
     }
 
+    /// `str`: The encoding of the file.
     #[getter]
     fn encoding(&self) -> String {
         self.inner.encoding.clone()
@@ -174,25 +191,60 @@ impl File {
         self.inner.encoding = encoding;
     }
 
-    #[pyo3(text_signature = "($self, name: str, /) -> $self")]
+    /// Sets the name of the file.
+    ///
+    /// ### Args:
+    ///
+    /// - name `str`:
+    /// The name to use.
+    ///
+    /// ### Returns:
+    ///
+    /// - `File`: The file, for chained method calls.
+    #[pyo3(text_signature = "(self, name: str, /) -> File")]
     fn set_name(mut slf: PyRefMut<Self>, name: String) -> PyRefMut<Self> {
         slf.inner.name = name;
         slf
     }
 
-    #[pyo3(text_signature = "($self, content: str, /) -> $self")]
+    /// Sets the content of the file.
+    ///
+    /// ### Args:
+    ///
+    /// - content `str`:
+    /// The content to use.
+    ///
+    /// ### Returns:
+    ///
+    /// - `File`: The file, for chained method calls.
+    #[pyo3(text_signature = "(self, content: str, /) -> File")]
     fn set_content(mut slf: PyRefMut<Self>, content: String) -> PyRefMut<Self> {
         slf.inner.content = content;
         slf
     }
 
-    #[pyo3(text_signature = "($self, encoding: str, /) -> $self")]
+    /// Sets the encoding of the file.
+    ///
+    /// ### Args:
+    ///
+    /// - encoding `str`:
+    /// The encoding to use.
+    ///
+    /// ### Returns:
+    ///
+    /// - `File`: The file, for chained method calls.
+    #[pyo3(text_signature = "(self, encoding: str, /) -> File")]
     fn set_encoding(mut slf: PyRefMut<Self>, encoding: String) -> PyRefMut<Self> {
         slf.inner.encoding = encoding;
         slf
     }
 
-    #[pyo3(text_signature = "($self) -> File")]
+    /// Copies the file, leaving the existing one unchanged.
+    ///
+    /// ### Returns:
+    ///
+    /// - `File`: A copy of the file.
+    #[pyo3(text_signature = "(self) -> File")]
     fn copy(&self) -> Self {
         self.clone()
     }
