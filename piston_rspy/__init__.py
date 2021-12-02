@@ -11,5 +11,4 @@ __all__: list[str] = [
     "ExecResponse",
     "Executor",
     "Client",
-    "FailedRequest",
 ]

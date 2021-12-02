@@ -116,7 +116,7 @@ impl Client {
     ///
     /// ### Raises:
     ///
-    /// - `FailedRequest`: If the request to Piston failed.
+    /// - `RuntimeError`: If the request to Piston failed.
     #[pyo3(text_signature = "(self) -> list[Runtime]")]
     fn fetch_runtimes<'a>(&self, py: Python<'a>) -> PyResult<&'a PyAny> {
         let client = self.inner.clone();
@@ -133,7 +133,7 @@ impl Client {
                     .into()
                 })),
                 Err(e) => Err(Python::with_gil(|_| {
-                    super::FailedRequest::new_err(format!("{:?}", e))
+                    pyo3::exceptions::PyRuntimeError::new_err(format!("{:?}", e))
                 })),
             }
         })
@@ -152,7 +152,7 @@ impl Client {
     ///
     /// ### Raises:
     ///
-    /// - `FailedRequest`: If the request to Piston failed.
+    /// - `RuntimeError`: If the request to Piston failed.
     #[pyo3(text_signature = "(self, executor: Executor, /) -> ExecResponse")]
     fn execute<'a>(&self, py: Python<'a>, executor: &Executor) -> PyResult<&'a PyAny> {
         let client = self.inner.clone();
@@ -164,7 +164,7 @@ impl Client {
                     ExecResponse::from_response(response).into_py(py)
                 })),
                 Err(e) => Err(Python::with_gil(|_| {
-                    super::FailedRequest::new_err(format!("{:?}", e))
+                    pyo3::exceptions::PyRuntimeError::new_err(format!("{:?}", e))
                 })),
             }
         })

@@ -9,7 +9,6 @@ __all__: list[str] = [
     "ExecResponse",
     "Executor",
     "Client",
-    "FailedRequest",
 ]
 
 
@@ -155,8 +154,3 @@ class Client:
     def get_url(self) -> str: ...
     async def fetch_runtimes(self) -> list[Runtime]: ...
     async def execute(self, executor: Executor) -> ExecResponse: ...
-
-class FailedRequest(Exception):
-    """Raised when a request to Piston fails."""
-
-    ...
