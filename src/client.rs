@@ -11,6 +11,8 @@ use super::Runtime;
 
 /// A client used to send requests to Piston.
 ///
+/// **NOTE**: Both the url, and headers properties of the client are immutable.
+///
 /// ### Returns:
 /// - `Client`: The new client.
 #[pyclass]
@@ -81,7 +83,6 @@ impl Client {
     }
 
     /// The base url for the Piston v2 api.
-    /// **NOTE**: The url is immutable.
     ///
     /// ### Returns:
     ///
@@ -98,7 +99,6 @@ impl Client {
     }
 
     /// The headers being sent with requests.
-    /// **NOTE**: The headers are immutable.
     ///
     /// ### Returns:
     ///

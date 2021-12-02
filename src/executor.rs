@@ -10,9 +10,9 @@ use super::File;
 
 /// The result of code execution returned by Piston.
 ///
-/// #### NOTE:
-/// >> This object cannot be instantiated, and is immutable.
-/// >> It is returned with `ExecResponse` from a call to `Client.execute`.
+/// **NOTE**:
+/// - This object cannot be instantiated, and is immutable.
+/// - It can only be created from a call to `Client.execute`.
 #[pyclass]
 #[derive(Clone)]
 pub struct ExecResult {
@@ -119,9 +119,9 @@ impl ExecResult {
 
 /// A response from the Piston api when sending a request to execute code.
 ///
-/// #### NOTE:
-/// >> This object cannot be instantiated, and is immutable.
-/// >> It is returned from a call to `Client.execute`.
+/// **NOTE**:
+/// - This object cannot be instantiated, and is immutable.
+/// - It can only be created from a call to `Client.execute`.
 #[pyclass]
 #[derive(Clone)]
 pub struct ExecResponse {
@@ -179,7 +179,7 @@ impl ExecResponse {
         self.inner.compile.as_ref().map(ExecResult::from_result)
     }
 
-    /// Whether or not the request to Piston was ok.
+    /// Whether or not the request to Piston succeeded.
     ///
     /// ### Returns:
     ///
@@ -189,7 +189,7 @@ impl ExecResponse {
         self.inner.is_ok()
     }
 
-    /// Whether or not the request to Piston was not ok.
+    /// Whether or not the request to Piston failed.
     ///
     /// ### Returns:
     ///
@@ -429,8 +429,9 @@ impl Executor {
         slf
     }
 
-    /// Adds a `File` containing the code to be executed. Does not
-    /// overwrite any existing files.
+    /// Adds a `File` containing the code to be executed.
+    ///
+    /// Does not overwrite any existing files.
     ///
     /// ### Args:
     ///
@@ -446,8 +447,9 @@ impl Executor {
         slf
     }
 
-    /// Adds multiple `File`'s containing code to be executed. Does not
-    /// overwrite any existing files.
+    /// Adds multiple `File`'s containing code to be executed.
+    ///
+    /// Does not overwrite any existing files.
     ///
     /// ### Args:
     ///
@@ -466,7 +468,7 @@ impl Executor {
     /// Adds multiple `File`'s containing the code to be executed.
     ///
     /// This method mutates the executor in place.
-    /// Overwrites any existing files.
+    /// **Overwrites any existing files.**
     ///
     /// ### Args:
     ///
@@ -532,7 +534,7 @@ impl Executor {
     /// Adds multiple args to be passed as command line arguments.
     ///
     /// This method mutates the executor in place.
-    /// Overwrites any existing args.
+    /// **Overwrites any existing args.**
     ///
     /// ### Args:
     ///
