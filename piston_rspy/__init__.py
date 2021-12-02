@@ -12,3 +12,6 @@ __all__: list[str] = [
     "Executor",
     "Client",
 ]
+
+__pdoc__: dict[str, bool] = {}
+__pdoc__["piston_rspy.piston_rspy"] = False
