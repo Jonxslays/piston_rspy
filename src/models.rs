@@ -19,10 +19,10 @@ use piston_rs::Runtime as Runtime_;
 ///
 /// ### Note:
 ///
-/// >>Runtimes are not meant to be created manually. Instead, they
-/// >>should be fetched from Piston using `Client.fetch_runtimes` and
-/// >>stored. The Python bindings for `piston_rs` do allow you to
-/// >>instantiate the class, however.
+/// >> Runtimes are not meant to be created manually. Instead, they
+/// >> should be fetched from Piston using `Client.fetch_runtimes` and
+/// >> stored. The Python bindings for `piston_rs` do allow you to
+/// >> instantiate the class, however.
 #[pyclass]
 #[derive(Clone)]
 #[pyo3(text_signature = "(language: str, version: str, aliases: list[str], /) -> Runtime")]

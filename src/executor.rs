@@ -8,6 +8,11 @@ use piston_rs::Executor as Executor_;
 
 use super::File;
 
+/// The result of code execution returned by Piston.
+///
+/// #### NOTE:
+/// >> This object cannot be instantiated, and is immutable.
+/// >> It is returned with `ExecResponse` from a call to `Client.execute`.
 #[pyclass]
 #[derive(Clone)]
 pub struct ExecResult {
@@ -26,6 +31,7 @@ impl PyObjectProtocol for ExecResult {
 }
 
 impl ExecResult {
+    /// Creates a new executor.
     pub fn new(
         stdout: String,
         stderr: String,
@@ -44,6 +50,7 @@ impl ExecResult {
         }
     }
 
+    /// Creates a new ExecResult, from a `piston_rs.ExecResult`.
     pub fn from_result(result: &ExecResult_) -> Self {
         Self {
             inner: result.clone(),
@@ -54,46 +61,67 @@ impl ExecResult {
 #[pymethods]
 impl ExecResult {
     #[new]
+    /// Raises a TypeError because this class cannot be instantiated.
     fn new_() -> PyResult<Self> {
         Err(PyTypeError::new_err("ExecResult can not be instantiated"))
     }
 
+    /// `str`: The text sent to `stdout` during execution.
     #[getter]
     fn stdout(&self) -> String {
         self.inner.stdout.clone()
     }
 
+    /// `str`: The text sent to `stderr` during execution.
     #[getter]
     fn stderr(&self) -> String {
         self.inner.stderr.clone()
     }
 
+    /// `str`: The text sent to both `stdout`, and `stderr` during execution.
     #[getter]
     fn output(&self) -> String {
         self.inner.output.clone()
     }
 
+    /// `int`: The exit code returned by the process.
     #[getter]
     fn code(&self) -> isize {
         self.inner.code
     }
 
+    /// `str | None`: The optional signal sent to the process. (`SIGKILL` etc)
     #[getter]
     fn signal(&self) -> Option<String> {
         self.inner.signal.clone()
     }
 
-    #[pyo3(text_signature = "($self) -> bool")]
+    /// Whether or not the execution was ok.
+    ///
+    /// ### Returns:
+    ///
+    /// - `bool`: `True` if the execution returned a zero exit code.
+    #[pyo3(text_signature = "(self) -> bool")]
     fn is_ok(&self) -> bool {
         self.inner.is_ok()
     }
 
-    #[pyo3(text_signature = "($self) -> bool")]
+    /// Whether or not the execution produced errors.
+    ///
+    /// ### Returns:
+    ///
+    /// - `bool`: `True` if the execution returned a non zero exit code.
+    #[pyo3(text_signature = "(self) -> bool")]
     fn is_err(&self) -> bool {
         self.inner.is_err()
     }
 }
 
+/// A response from the Piston api when sending a request to execute code.
+///
+/// #### NOTE:
+/// >> This object cannot be instantiated, and is immutable.
+/// >> It is returned from a call to `Client.execute`.
 #[pyclass]
 #[derive(Clone)]
 pub struct ExecResponse {
@@ -101,6 +129,7 @@ pub struct ExecResponse {
 }
 
 impl ExecResponse {
+    /// Creates a new ExecResponse from a `piston_rs.ExecResponse`.
     pub fn from_response(response: ExecResponse_) -> Self {
         Self { inner: response }
     }
@@ -120,49 +149,72 @@ impl PyObjectProtocol for ExecResponse {
 #[pymethods]
 impl ExecResponse {
     #[new]
+    /// Raises a TypeError because this class cannot be instantiated.
     fn new_() -> PyResult<Self> {
         Err(PyTypeError::new_err("ExecResponse can not be instantiated"))
     }
 
+    /// `str`: The language that was used.
     #[getter]
     fn language(&self) -> String {
         self.inner.language.clone()
     }
 
+    /// `str`: The version of the language that was used.
     #[getter]
     fn version(&self) -> String {
         self.inner.version.clone()
     }
 
+    /// `ExecResult`: The result Piston sends detailing execution.
     #[getter]
     fn run(&self) -> ExecResult {
         ExecResult::from_result(&self.inner.run)
     }
 
+    /// `ExecResult | None`: The optional result Piston sends detailing compilation.
+    /// This will be `None` for non-compiled languages.
     #[getter]
     fn compile(&self) -> Option<ExecResult> {
         self.inner.compile.as_ref().map(ExecResult::from_result)
     }
 
-    #[pyo3(text_signature = "($self) -> bool")]
+    /// Whether or not the request to Piston was ok.
+    ///
+    /// ### Returns:
+    ///
+    /// - `bool`: `True` if a 200 status code was received.
+    #[pyo3(text_signature = "(self) -> bool")]
     fn is_ok(&self) -> bool {
         self.inner.is_ok()
     }
 
-    #[pyo3(text_signature = "($self) -> bool")]
+    /// Whether or not the request to Piston was not ok.
+    ///
+    /// ### Returns:
+    ///
+    /// - `bool`: `True` if a non 200 status code was received.
+    #[pyo3(text_signature = "(self) -> bool")]
     fn is_err(&self) -> bool {
         self.inner.is_err()
     }
 }
 
+/// An object containing information about the code being executed.
+///
+/// A convenient builder flow is provided by the methods associated with
+/// the `Executor`. These consume self and return self for chained calls.
 #[pyclass]
-#[pyo3(text_signature = "() -> bool")]
 #[derive(Clone)]
+#[pyo3(
+    text_signature = "(language: str = \"\", version: str = \"\", files: list[File] = [], stdin: str = \"\", args: list[str] = [], compile_timeout: int = 10000, run_timeout: int = 3000, compile_memory_limit: int = -1, run_memory_limit: int = -1, /) -> Executor"
+)]
 pub struct Executor {
     inner: Executor_,
 }
 
 impl Executor {
+    /// Converts the Executor into a piston_rs.Executor.
     pub fn convert(&self) -> Executor_ {
         self.inner.clone()
     }
@@ -220,6 +272,7 @@ impl Executor {
         }
     }
 
+    /// `str`: The language to use for execution.
     #[getter]
     fn language(&self) -> String {
         self.inner.language.clone()
@@ -230,6 +283,7 @@ impl Executor {
         self.inner.language = language;
     }
 
+    /// `str`: The version of the language to use for execution.
     #[getter]
     fn version(&self) -> String {
         self.inner.version.clone()
@@ -240,6 +294,8 @@ impl Executor {
         self.inner.version = version;
     }
 
+    /// `list[File]`: A list of files to send to Piston. The first file
+    /// in the list is considered the main file.
     #[getter]
     fn files(&self) -> Vec<File> {
         self.inner
@@ -256,6 +312,7 @@ impl Executor {
             .set_files(files.iter().map(|f| f.convert()).collect());
     }
 
+    /// `str`: The text to pass as stdin to the program."
     #[getter]
     fn stdin(&self) -> String {
         self.inner.stdin.clone()
@@ -266,6 +323,7 @@ impl Executor {
         self.inner.stdin = stdin;
     }
 
+    /// `list[str]`: The command line arguments to pass to the program."
     #[getter]
     fn args(&self) -> Vec<String> {
         self.inner.args.clone()
@@ -276,6 +334,7 @@ impl Executor {
         self.inner.args = args;
     }
 
+    /// `int`: The maximum allowed time for compilation in milliseconds."
     #[getter]
     fn compile_timeout(&self) -> isize {
         self.inner.compile_timeout
@@ -286,6 +345,7 @@ impl Executor {
         self.inner.compile_timeout = timeout;
     }
 
+    /// `int`: The maximum allowed time for execution in milliseconds."
     #[getter]
     fn run_timeout(&self) -> isize {
         self.inner.compile_timeout
@@ -296,6 +356,7 @@ impl Executor {
         self.inner.run_timeout = timeout;
     }
 
+    /// `int`: The maximum allowed memory usage for compilation in bytes."
     #[getter]
     fn compile_memory_limit(&self) -> isize {
         self.inner.compile_memory_limit
@@ -306,6 +367,7 @@ impl Executor {
         self.inner.compile_memory_limit = limit;
     }
 
+    /// `int`: The maximum allowed memory usage for execution in bytes.
     #[getter]
     fn run_memory_limit(&self) -> isize {
         self.inner.run_memory_limit
@@ -316,87 +378,230 @@ impl Executor {
         self.inner.run_memory_limit = limit;
     }
 
-    #[pyo3(text_signature = "($self) -> Executor")]
+    /// Copies the executor, leaving the existing one unchanged.
+    ///
+    /// ### Returns:
+    ///
+    /// - `Executor`: A copy of the executor.
+    #[pyo3(text_signature = "(self) -> Executor")]
     fn copy(&self) -> Self {
         self.clone()
     }
 
-    #[pyo3(text_signature = "($self) -> None")]
+    /// Resets the executor back to a `new` state, ready to be
+    /// configured again and sent to Piston after metadata is added.
+    ///
+    /// This method mutates the executor in place.
+    #[pyo3(text_signature = "(self) -> None")]
     fn reset(&mut self) {
         self.inner.reset();
     }
 
-    #[pyo3(text_signature = "($self, language: str, /) -> $self")]
+    /// Sets the language to use for execution.
+    ///
+    /// ### Args:
+    ///
+    /// - language `str`:
+    /// The language to use.
+    ///
+    /// ### Returns:
+    ///
+    /// - `Executor`: The executor, for chained method calls.
+    #[pyo3(text_signature = "(self, language: str, /) -> Executor")]
     fn set_language(mut slf: PyRefMut<Self>, language: String) -> PyRefMut<Self> {
         slf.inner.language = language;
         slf
     }
 
-    #[pyo3(text_signature = "($self, version: str, /) -> $self")]
+    /// Sets the version of the language to use for execution.
+    ///
+    /// ### Args:
+    ///
+    /// - version `str`:
+    /// The version to use.
+    ///
+    /// ### Returns:
+    ///
+    /// - `Executor`: The executor, for chained method calls.
+    #[pyo3(text_signature = "(self, version: str, /) -> Executor")]
     fn set_version(mut slf: PyRefMut<Self>, version: String) -> PyRefMut<Self> {
         slf.inner.version = version;
         slf
     }
 
-    #[pyo3(text_signature = "($self, file: File, /) -> $self")]
+    /// Adds a `File` containing the code to be executed. Does not
+    /// overwrite any existing files.
+    ///
+    /// ### Args:
+    ///
+    /// - file `File`:
+    /// The file to add.
+    ///
+    /// ### Returns:
+    ///
+    /// - `Executor`: The executor, for chained method calls.
+    #[pyo3(text_signature = "(self, file: File, /) -> Executor")]
     fn add_file(mut slf: PyRefMut<Self>, file: File) -> PyRefMut<Self> {
         slf.inner.files.push(file.convert());
         slf
     }
 
-    #[pyo3(text_signature = "($self, files: list[File], /) -> $self")]
+    /// Adds multiple `File`'s containing code to be executed. Does not
+    /// overwrite any existing files.
+    ///
+    /// ### Args:
+    ///
+    /// - files `list[File]`:
+    /// The file to add.
+    ///
+    /// ### Returns:
+    ///
+    /// - `Executor`: The executor, for chained method calls.
+    #[pyo3(text_signature = "(self, files: list[File], /) -> Executor")]
     fn add_files(mut slf: PyRefMut<Self>, files: Vec<File>) -> PyRefMut<Self> {
         slf.inner.files.extend(files.iter().map(|f| f.convert()));
         slf
     }
 
-    #[pyo3(text_signature = "($self, files: list[File], /) -> None")]
+    /// Adds multiple `File`'s containing the code to be executed.
+    ///
+    /// This method mutates the executor in place.
+    /// Overwrites any existing files.
+    ///
+    /// ### Args:
+    ///
+    /// - files `list[File]`:
+    /// The files to replace existing files with.
+    #[pyo3(text_signature = "(self, files: list[File], /) -> None")]
     fn set_files(&mut self, files: Vec<File>) {
         self.inner.files = files.iter().map(|f| f.convert()).collect();
     }
 
-    #[pyo3(text_signature = "($self, stdin: str, /) -> $self")]
+    /// Sets the text to pass as `stdin` to the program.
+    ///
+    /// ### Args:
+    ///
+    /// - stdin `str`:
+    /// The text to set.
+    ///
+    /// ### Returns:
+    ///
+    /// - `Executor`: The executor, for chained method calls.
+    #[pyo3(text_signature = "(self, stdin: str, /) -> Executor")]
     fn set_stdin(mut slf: PyRefMut<Self>, stdin: String) -> PyRefMut<Self> {
         slf.inner.stdin = stdin;
         slf
     }
 
-    #[pyo3(text_signature = "($self, arg: str, /) -> $self")]
+    /// Adds an arg to be passed as a command line argument.
+    ///
+    /// Does not overwrite any existing args.
+    ///
+    /// ### Args:
+    ///
+    /// - arg `str`:
+    /// The arg to add.
+    ///
+    /// ### Returns:
+    ///
+    /// - `Executor`: The executor, for chained method calls.
+    #[pyo3(text_signature = "(self, arg: str, /) -> Executor")]
     fn add_arg(mut slf: PyRefMut<Self>, arg: String) -> PyRefMut<Self> {
         slf.inner.args.push(arg);
         slf
     }
 
-    #[pyo3(text_signature = "($self, args: str, /) -> $self")]
+    /// Adds multiple args to be passed as a command line argument.
+    ///
+    /// Does not overwrite any existing args.
+    ///
+    /// ### Args:
+    ///
+    /// - args `list[str]`:
+    /// The args to add.
+    ///
+    /// ### Returns:
+    ///
+    /// - `Executor`: The executor, for chained method calls.
+    #[pyo3(text_signature = "(self, args: list[str], /) -> Executor")]
     fn add_args(mut slf: PyRefMut<Self>, args: Vec<String>) -> PyRefMut<Self> {
         slf.inner.args.extend(args);
         slf
     }
 
-    #[pyo3(text_signature = "($self, args: str, /) -> None")]
+    /// Adds multiple args to be passed as command line arguments.
+    ///
+    /// This method mutates the executor in place.
+    /// Overwrites any existing args.
+    ///
+    /// ### Args:
+    ///
+    /// - args `list[str]`:
+    /// The arg to add.
+    #[pyo3(text_signature = "(self, args: list[str], /) -> None")]
     fn set_args(&mut self, args: Vec<String>) {
         self.inner.args = args;
     }
 
-    #[pyo3(text_signature = "($self, timeout: int, /) -> $self")]
+    /// Sets the maximum allowed time for compilation in milliseconds.
+    ///
+    /// ### Args:
+    ///
+    /// - timeout `int`:
+    /// The timeout to set.
+    ///
+    /// ### Returns:
+    ///
+    /// - `Executor`: The executor, for chained method calls.
+    #[pyo3(text_signature = "(self, timeout: int, /) -> Executor")]
     fn set_compile_timeout(mut slf: PyRefMut<Self>, timeout: isize) -> PyRefMut<Self> {
         slf.inner.compile_timeout = timeout;
         slf
     }
 
-    #[pyo3(text_signature = "($self, timeout: int, /) -> $self")]
+    /// Sets the maximum allowed time for execution in milliseconds.
+    ///
+    /// ### Args:
+    ///
+    /// - timeout `int`:
+    /// The timeout to set.
+    ///
+    /// ### Returns:
+    ///
+    /// - `Executor`: The executor, for chained method calls.
+    #[pyo3(text_signature = "(self, timeout: int, /) -> Executor")]
     fn set_run_timeout(mut slf: PyRefMut<Self>, timeout: isize) -> PyRefMut<Self> {
         slf.inner.run_timeout = timeout;
         slf
     }
 
-    #[pyo3(text_signature = "($self, limit: int, /) -> $self")]
+    /// Sets the maximum allowed memory usage for compilation in bytes.
+    ///
+    /// ### Args:
+    ///
+    /// - limit `int`:
+    /// The limit to set.
+    ///
+    /// ### Returns:
+    ///
+    /// - `Executor`: The executor, for chained method calls.
+    #[pyo3(text_signature = "(self, limit: int, /) -> Executor")]
     fn set_compile_memory_limit(mut slf: PyRefMut<Self>, limit: isize) -> PyRefMut<Self> {
         slf.inner.compile_memory_limit = limit;
         slf
     }
 
-    #[pyo3(text_signature = "($self, limit: int, /) -> $self")]
+    /// Sets the maximum allowed memory usage for execution in bytes.
+    ///
+    /// ### Args:
+    ///
+    /// - limit `int`:
+    /// The limit to set.
+    ///
+    /// ### Returns:
+    ///
+    /// - `Executor`: The executor, for chained method calls.
+    #[pyo3(text_signature = "(self, limit: int, /) -> Executor")]
     fn set_run_memory_limit(mut slf: PyRefMut<Self>, limit: isize) -> PyRefMut<Self> {
         slf.inner.run_memory_limit = limit;
         slf

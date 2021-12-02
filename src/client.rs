@@ -38,6 +38,7 @@ impl PyObjectProtocol for Client {
 
 #[pymethods]
 impl Client {
+    /// Creates a new client.
     #[new]
     fn new() -> Self {
         let inner = Client_::new();
