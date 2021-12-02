@@ -11,8 +11,9 @@ use super::File;
 /// The result of code execution returned by Piston.
 ///
 /// **NOTE**:
+///
 /// - This object cannot be instantiated, and is immutable.
-/// - It can only be created from a call to `Client.execute`.
+/// - It can only be created with a call to `Client.execute`.
 #[pyclass]
 #[derive(Clone)]
 pub struct ExecResult {
@@ -90,7 +91,7 @@ impl ExecResult {
         self.inner.code
     }
 
-    /// `str | None`: The optional signal sent to the process. (`SIGKILL` etc)
+    /// `str` | `None`: The optional signal sent to the process. (`SIGKILL` etc)
     #[getter]
     fn signal(&self) -> Option<String> {
         self.inner.signal.clone()
@@ -120,8 +121,9 @@ impl ExecResult {
 /// A response from the Piston api when sending a request to execute code.
 ///
 /// **NOTE**:
+///
 /// - This object cannot be instantiated, and is immutable.
-/// - It can only be created from a call to `Client.execute`.
+/// - It can only be created with a call to `Client.execute`.
 #[pyclass]
 #[derive(Clone)]
 pub struct ExecResponse {
@@ -172,7 +174,7 @@ impl ExecResponse {
         ExecResult::from_result(&self.inner.run)
     }
 
-    /// `ExecResult | None`: The optional result Piston sends detailing compilation.
+    /// `ExecResult` | `None`: The optional result Piston sends detailing compilation.
     /// This will be `None` for non-compiled languages.
     #[getter]
     fn compile(&self) -> Option<ExecResult> {
@@ -204,6 +206,9 @@ impl ExecResponse {
 ///
 /// A convenient builder flow is provided by the methods associated with
 /// the `Executor`. These consume self and return self for chained calls.
+///
+/// - For `compile_memory_limit` and `run_memory_limit` -1 can be used
+/// to signify no limit.
 #[pyclass]
 #[derive(Clone)]
 #[pyo3(
@@ -312,7 +317,7 @@ impl Executor {
             .set_files(files.iter().map(|f| f.convert()).collect());
     }
 
-    /// `str`: The text to pass as stdin to the program."
+    /// `str`: The text to pass as stdin to the program.
     #[getter]
     fn stdin(&self) -> String {
         self.inner.stdin.clone()
@@ -323,7 +328,7 @@ impl Executor {
         self.inner.stdin = stdin;
     }
 
-    /// `list[str]`: The command line arguments to pass to the program."
+    /// `list[str]`: The command line arguments to pass to the program.
     #[getter]
     fn args(&self) -> Vec<String> {
         self.inner.args.clone()
@@ -334,7 +339,7 @@ impl Executor {
         self.inner.args = args;
     }
 
-    /// `int`: The maximum allowed time for compilation in milliseconds."
+    /// `int`: The maximum allowed time for compilation in milliseconds.
     #[getter]
     fn compile_timeout(&self) -> isize {
         self.inner.compile_timeout
@@ -345,7 +350,7 @@ impl Executor {
         self.inner.compile_timeout = timeout;
     }
 
-    /// `int`: The maximum allowed time for execution in milliseconds."
+    /// `int`: The maximum allowed time for execution in milliseconds.
     #[getter]
     fn run_timeout(&self) -> isize {
         self.inner.compile_timeout
@@ -356,7 +361,7 @@ impl Executor {
         self.inner.run_timeout = timeout;
     }
 
-    /// `int`: The maximum allowed memory usage for compilation in bytes."
+    /// `int`: The maximum allowed memory usage for compilation in bytes.
     #[getter]
     fn compile_memory_limit(&self) -> isize {
         self.inner.compile_memory_limit
@@ -539,7 +544,7 @@ impl Executor {
     /// ### Args:
     ///
     /// - args `list[str]`:
-    /// The arg to add.
+    /// The args to replace existing args with.
     #[pyo3(text_signature = "(self, args: list[str], /) -> None")]
     fn set_args(&mut self, args: Vec<String>) {
         self.inner.args = args;

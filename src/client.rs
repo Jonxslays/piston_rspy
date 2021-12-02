@@ -11,10 +11,10 @@ use super::Runtime;
 
 /// A client used to send requests to Piston.
 ///
-/// **NOTE**: Both the url, and headers properties of the client are immutable.
+/// **NOTE**:
 ///
-/// ### Returns:
-/// - `Client`: The new client.
+/// - The client is immutable, and by extension its properties are
+/// also immutable.
 #[pyclass]
 #[derive(Clone)]
 #[pyo3(text_signature = "() -> Client")]
@@ -108,7 +108,7 @@ impl Client {
         self.headers()
     }
 
-    /// **CORO**: Fetches the runtimes from Piston. This is an http request.
+    /// **async**: Fetches the runtimes from Piston. This is an http request.
     ///
     /// ### Returns:
     ///
@@ -139,7 +139,7 @@ impl Client {
         })
     }
 
-    /// **CORO**: Executes code using a given executor. This is an http request.
+    /// **async**: Executes code using a given executor. This is an http request.
     ///
     /// ### Args:
     ///

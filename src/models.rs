@@ -6,17 +6,6 @@ use piston_rs::Runtime as Runtime_;
 
 /// A runtime available to be used by Piston.
 ///
-/// ### Args:
-///
-/// - language `str`:
-/// The language.
-///
-/// - version `str`:
-/// The version of the language.
-///
-/// - aliases `list[str]`:
-/// The aliases associated with this runtime.
-///
 /// ### Note:
 ///
 /// >> Runtimes are not meant to be created manually. Instead, they
@@ -91,17 +80,6 @@ impl Runtime {
 }
 
 /// A file that contains the source code to be executed.
-///
-/// ### Args:
-///
-/// - name `str`:
-/// The name of the file. Defaults to "".
-///
-/// - content `str`:
-/// **Required by Piston** The content of the file. Defaults to "".
-///
-/// - encoding `str`:
-/// The encoding of the file. Defaults to "utf8".
 #[pyclass]
 #[derive(Clone)]
 #[pyo3(
@@ -169,7 +147,7 @@ impl File {
         self.inner.name = name;
     }
 
-    /// `str`: The content of the file.
+    /// `str`: **Required by Piston** The content of the file.
     #[getter]
     fn content(&self) -> String {
         self.inner.content.clone()
