@@ -1,69 +1,124 @@
 name: Pypi-release
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - v0.1.0
+  # release:
+  #   types: [published]
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check version
+        run: |
+          latest=$(git tag -l | tail -1)
+          cargo_v=$(grep -m 1 -oP 'version = "(.*)"' Cargo.toml | sed -rn 's/.*"(.*)"/v\1/p')
+          pyproject_v=$(grep -m 1 -oP 'version = "(.*)"' pyproject.toml | sed -rn 's/.*"(.*)"/v\1/p')
+
+          if [ ! $latest = $cargo_v ]; then
+            exit 1
+          elif [ ! $latest = $pyproject_v ]; then
+            exit 2
+          fi
+          exit 0
+
   linux:
     runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: messense/maturin-action@v1
-      with:
-        manylinux: auto
-        command: build
-        args: --release -o dist
-    - name: Upload wheels
-      uses: actions/upload-artifact@v2
-      with:
-        name: wheels
-        path: dist
 
-  windows:
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: messense/maturin-action@v1
-      with:
-        command: build
-        args: --release --no-sdist -o dist
-    - name: Upload wheels
-      uses: actions/upload-artifact@v2
-      with:
-        name: wheels
-        path: dist
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.7", "3.8", "3.9", "3.10"]
 
-  macos:
-    runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: messense/maturin-action@v1
-      with:
-        command: build
-        args: --release --no-sdist -o dist --universal2
-    - name: Upload wheels
-      uses: actions/upload-artifact@v2
-      with:
-        name: wheels
-        path: dist
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-  release:
-    name: Release
-    runs-on: ubuntu-latest
-    if: "startsWith(github.ref, 'refs/tags/')"
-    needs: [ macos, windows, linux ]
-    steps:
-      - uses: actions/download-artifact@v2
+      - name: Install rust stable
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Install Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install maturin
+        run: pip install maturin
+
+      - name: Build wheel
+        run: maturin build --release -o dist --target x86_64-unknown-linux-gnu
+
+      - name: Upload wheels
+        uses: actions/upload-artifact@v2
         with:
           name: wheels
-      - uses: actions/setup-python@v2
-        with:
-          python-version: "3.9"
-      - name: Publish to PyPI
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-        run: |
-          pip install --upgrade twine
-          twine upload --skip-existing *
+          path: dist
+
+  # linux:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: openssl?
+  #     run: export OPENSSL_DIR=$(which openssl)
+  #   - uses: messense/maturin-action@v1
+  #     with:
+  #       manylinux: 2014
+  #       command: build
+  #       args: --release -o dist
+  #   - name: Upload wheels
+  #     uses: actions/upload-artifact@v2
+  #     with:
+  #       name: wheels
+  #       path: dist
+
+  # windows:
+  #   runs-on: windows-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - uses: messense/maturin-action@v1
+  #     with:
+  #       command: build
+  #       args: --release --no-sdist -o dist
+  #   - name: Upload wheels
+  #     uses: actions/upload-artifact@v2
+  #     with:
+  #       name: wheels
+  #       path: dist
+
+  # macos:
+  #   runs-on: macos-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - uses: messense/maturin-action@v1
+  #     with:
+  #       command: build
+  #       args: --release --no-sdist -o dist --universal2
+  #   - name: Upload wheels
+  #     uses: actions/upload-artifact@v2
+  #     with:
+  #       name: wheels
+  #       path: dist
+
+  # release:
+  #   name: Release
+  #   runs-on: ubuntu-latest
+  #   if: "startsWith(github.ref, 'refs/tags/')"
+  #   needs: [ macos, windows, linux, setup ]
+  #   steps:
+  #     - uses: actions/download-artifact@v2
+  #       with:
+  #         name: wheels
+  #     - uses: actions/setup-python@v2
+  #       with:
+  #         python-version: "3.9"
+  #     - name: Publish to PyPI
+  #       env:
+  #         TWINE_USERNAME: __token__
+  #         TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+  #       run: |
+  #         pip install --upgrade twine
+  #         twine upload --skip-existing *
