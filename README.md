@@ -70,6 +70,7 @@ async def main() -> None:
 
     print(f"Output:\n{response.run.output}")
 
+
 if __name__ == "__main__":
     asyncio.run(main())
 ```
@@ -95,7 +96,7 @@ async def main() -> None:
             piston_rspy.File(
                 name="main.py",
                 content="for i in range(10): print(i)",
-            )
+            ),
         )
     )
 
@@ -105,6 +106,7 @@ async def main() -> None:
         print(f"Compilation:\n{response.compile.output}")
 
     print(f"Output:\n{response.run.output}")
+
 
 if __name__ == "__main__":
     asyncio.run(main())

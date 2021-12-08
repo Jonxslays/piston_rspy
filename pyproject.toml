@@ -4,30 +4,18 @@ version = "0.1.0"
 description = "Python bindings for piston_rs."
 readme = "README.md"
 documentation = "https://jonxslays.github.io/piston_rspy/piston_rspy/"
+repository = "https://github.com/Jonxslays/piston_rspy"
+url = "https://github.com/Jonxslays/piston_rspy"
 requires-python = ">=3.7,<3.11"
-classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Framework :: AsyncIO",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-    "Programming Language :: Rust",
-    "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: Implementation :: CPython",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "Typing :: Typed",
-]
 
 [tool.pyright]
 typeCheckingMode = "strict"
-include = ["piston_rspy.pyi"]
+include = ["piston_rspy"]
 
 [tool.black]
 line-length = 99
 
 [build-system]
-requires = ["maturin>=0.12,<0.13"]
-build-backend = "maturin"
+# requires = ["maturin>=0.12,<0.13"]
+# build-backend = "maturin"
+requires = ["setuptools", "wheel", "setuptools-rust"]

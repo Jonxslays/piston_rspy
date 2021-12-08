@@ -1,17 +1,14 @@
-name: Pypi-release
+name: PyPI-release
 
 on:
-  push:
-    tags:
-      - v0.1.0
-  # release:
-  #   types: [published]
+  release:
+    types: [published]
 
 jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
-      - name: Check version
+      - name: check project version
         run: |
           latest=$(git tag -l | tail -1)
           cargo_v=$(grep -m 1 -oP 'version = "(.*)"' Cargo.toml | sed -rn 's/.*"(.*)"/v\1/p')
@@ -24,101 +21,97 @@ jobs:
           fi
           exit 0
 
-  linux:
-    runs-on: ubuntu-latest
-
+  build:
+    name: build python 3.${{ matrix.python-version }} on ${{ matrix.platform || matrix.os }}
+    needs:
+      - setup
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10"]
+        os:
+        - ubuntu
+        - macos
+        - windows
+        python-version:
+        - '7'
+        - '9'
+        - '8'
+        - '10'
+        include:
+        - os: ubuntu
+          platform: linux
+        - os: windows
+          ls: dir
 
+    runs-on: ${{ format('{0}-latest', matrix.os) }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
-      - name: Install rust stable
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
+    - name: set up python
+      uses: actions/setup-python@v2
+      with:
+        python-version: "3.8"
 
-      - name: Install Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
+    - name: set up rust
+      if: matrix.os != 'ubuntu'
+      uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: stable
+        override: true
 
-      - name: Install maturin
-        run: pip install maturin
+    - name: install python dependencies
+      run: pip install -U setuptools wheel twine cibuildwheel
 
-      - name: Build wheel
-        run: maturin build --release -o dist --target x86_64-unknown-linux-gnu
+    - name: build sdist
+      if: matrix.os == 'ubuntu' && matrix.python-version == '8'
+      run: |
+        pip install -U setuptools-rust
+        python setup.py sdist
 
-      - name: Upload wheels
-        uses: actions/upload-artifact@v2
-        with:
-          name: wheels
-          path: dist
+    - name: build ${{ matrix.platform || matrix.os }} binaries
+      run: cibuildwheel --output-dir dist
+      env:
+        CIBW_BUILD: 'cp3${{ matrix.python-version }}-*'
+        CIBW_SKIP: '*-win32 *-musllinux*i686'
+        CIBW_PLATFORM: ${{ matrix.platform || matrix.os }}
+        CIBW_ENVIRONMENT: 'PATH="$HOME/.cargo/bin:$PATH"'
+        CIBW_ENVIRONMENT_WINDOWS: 'PATH="$UserProfile\.cargo\bin;$PATH"'
+        CIBW_MANYLINUX_X86_64_IMAGE: 'manylinux2014'
+        CIBW_MANYLINUX_I686_IMAGE: 'manylinux2014'
+        CIBW_BEFORE_BUILD: >
+          pip install -U setuptools-rust &&
+          rustup default stable &&
+          rustup show
+        CIBW_BEFORE_BUILD_LINUX: >
+          yum install -y openssl-devel || apk add openssl-dev musl-dev &&
+          pip install -U setuptools-rust &&
+          curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain=stable --profile=minimal -y &&
+          rustup show
 
-  # linux:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - name: openssl?
-  #     run: export OPENSSL_DIR=$(which openssl)
-  #   - uses: messense/maturin-action@v1
-  #     with:
-  #       manylinux: 2014
-  #       command: build
-  #       args: --release -o dist
-  #   - name: Upload wheels
-  #     uses: actions/upload-artifact@v2
-  #     with:
-  #       name: wheels
-  #       path: dist
+    - name: build windows 32bit binaries
+      if: matrix.os == 'windows'
+      run: cibuildwheel --output-dir dist
+      env:
+        CIBW_BUILD: 'cp3${{ matrix.python-version }}-win32'
+        CIBW_PLATFORM: windows
+        CIBW_ENVIRONMENT: 'PATH="$UserProfile\.cargo\bin;$PATH"'
+        CIBW_BEFORE_BUILD: >
+          pip install -U setuptools-rust &&
+          rustup toolchain install stable-i686-pc-windows-msvc &&
+          rustup default stable-i686-pc-windows-msvc &&
+          rustup override set stable-i686-pc-windows-msvc &&
+          rustup show
 
-  # windows:
-  #   runs-on: windows-latest
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - uses: messense/maturin-action@v1
-  #     with:
-  #       command: build
-  #       args: --release --no-sdist -o dist
-  #   - name: Upload wheels
-  #     uses: actions/upload-artifact@v2
-  #     with:
-  #       name: wheels
-  #       path: dist
+    - name: list dist files
+      run: ${{ matrix.ls || 'ls -lh' }} dist/
 
-  # macos:
-  #   runs-on: macos-latest
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - uses: messense/maturin-action@v1
-  #     with:
-  #       command: build
-  #       args: --release --no-sdist -o dist --universal2
-  #   - name: Upload wheels
-  #     uses: actions/upload-artifact@v2
-  #     with:
-  #       name: wheels
-  #       path: dist
+    - name: twine check
+      run: twine check dist/*
 
-  # release:
-  #   name: Release
-  #   runs-on: ubuntu-latest
-  #   if: "startsWith(github.ref, 'refs/tags/')"
-  #   needs: [ macos, windows, linux, setup ]
-  #   steps:
-  #     - uses: actions/download-artifact@v2
-  #       with:
-  #         name: wheels
-  #     - uses: actions/setup-python@v2
-  #       with:
-  #         python-version: "3.9"
-  #     - name: Publish to PyPI
-  #       env:
-  #         TWINE_USERNAME: __token__
-  #         TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-  #       run: |
-  #         pip install --upgrade twine
-  #         twine upload --skip-existing *
+    - name: upload to pypi
+      if: startsWith(github.ref, 'refs/tags/')
+      run: twine upload dist/*
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.pypi_token }}
