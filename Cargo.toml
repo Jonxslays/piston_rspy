@@ -20,4 +20,4 @@ crate-type = ["cdylib"]
 pyo3 = { version = "0.14", features = ["extension-module"] }
 pyo3-asyncio = { version = "0.14", features = ["tokio-runtime"] }
 tokio = { version = "1" }
-piston_rs = "^0.2.3"
+piston_rs = { git = "https://github.com/Jonxslays/piston_rs.git", rev = "1dc6984" }

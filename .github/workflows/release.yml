@@ -84,7 +84,6 @@ jobs:
           rustup default stable &&
           rustup show
         CIBW_BEFORE_BUILD_LINUX: >
-          yum install -y openssl-devel || apk add openssl-dev musl-dev &&
           pip install -U setuptools-rust &&
           curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain=stable --profile=minimal -y &&
           rustup show
