@@ -203,7 +203,7 @@ class Executor:
     Args:
         language: `str` = ""
             The language to use for execution.
-        version: `str` = ""
+        version: `str` = "*"
             The version of the language to use for execution.
         files: `list[File]` = []
             A list of files to send to Piston. The first file in the
@@ -224,7 +224,7 @@ class Executor:
     """
 
     language: str = ""
-    version: str = ""
+    version: str = "*"
     files: list[File] = field(default_factory=list)
     stdin: str = ""
     args: list[str] = field(default_factory=list)

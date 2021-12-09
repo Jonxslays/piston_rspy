@@ -212,7 +212,7 @@ impl ExecResponse {
 #[pyclass]
 #[derive(Clone)]
 #[pyo3(
-    text_signature = "(language: str = \"\", version: str = \"\", files: list[File] = [], stdin: str = \"\", args: list[str] = [], compile_timeout: int = 10000, run_timeout: int = 3000, compile_memory_limit: int = -1, run_memory_limit: int = -1, /) -> Executor"
+    text_signature = "(language: str = \"\", version: str = \"*\", files: list[File] = [], stdin: str = \"\", args: list[str] = [], compile_timeout: int = 10000, run_timeout: int = 3000, compile_memory_limit: int = -1, run_memory_limit: int = -1, /) -> Executor"
 )]
 pub struct Executor {
     inner: Executor_,
@@ -241,7 +241,7 @@ impl Executor {
     #[new]
     #[args(
         language = "\"\".to_string()",
-        version = "\"\".to_string()",
+        version = "\"*\".to_string()",
         files = "vec![]",
         stdin = "\"\".to_string()",
         args = "vec![]",
@@ -285,7 +285,7 @@ impl Executor {
 
     #[setter(language)]
     fn language_setter(&mut self, language: String) {
-        self.inner.language = language;
+        self.inner.language = language.to_lowercase();
     }
 
     /// `str`: The version of the language to use for execution.
@@ -414,7 +414,7 @@ impl Executor {
     /// - `Executor`: The executor, for chained method calls.
     #[pyo3(text_signature = "(self, language: str, /) -> Executor")]
     fn set_language(mut slf: PyRefMut<Self>, language: String) -> PyRefMut<Self> {
-        slf.inner.language = language;
+        slf.inner.language = language.to_lowercase();
         slf
     }
 
