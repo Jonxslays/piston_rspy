@@ -13,12 +13,19 @@ jobs:
           latest=$(git tag -l | tail -1)
           cargo_v=$(grep -m 1 -oP 'version = "(.*)"' Cargo.toml | sed -rn 's/.*"(.*)"/v\1/p')
           pyproject_v=$(grep -m 1 -oP 'version = "(.*)"' pyproject.toml | sed -rn 's/.*"(.*)"/v\1/p')
+          setup_v=$(grep -m 1 -oP 'version="(.*)"' setup.py | sed -rn 's/.*"(.*)"/v\1/p')
 
           if [ ! $latest = $cargo_v ]; then
+            echo "Latest tag doesnt match Cargo.toml version - failing build."
             exit 1
           elif [ ! $latest = $pyproject_v ]; then
-            exit 2
+            echo "Latest tag doesnt match pyproject.toml version - failing build."
+            exit 1
+          elif [ ! $latest = $setup_v ]; then
+            echo "Latest tag doesnt match setup.py version - failing build."
+            exit 1
           fi
+
           exit 0
 
   build:
