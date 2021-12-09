@@ -9,7 +9,7 @@ with open("README.md") as r:
 
 setup(
     name="piston_rspy",
-    version="0.1.2",
+    version="0.1.3",
     description="Python bindings for piston_rs.",
     author="Jonxslays",
     long_description=long_description,

@@ -11,7 +11,8 @@ a Rust library designed for the same purpose.
 
 # Getting started
 
-For an in depth look at the API, check out the [Documentation](https://jonxslays.github.io/piston_rspy/piston_rspy/)!
+piston_rspy officially supports Python versions 3.7, 3.8, 3.9, and 3.10.
+For an in depth look at the API, check out the [documentation](https://jonxslays.github.io/piston_rspy/piston_rspy/)!
 
 #### Installation
 
@@ -96,7 +97,7 @@ async def main() -> None:
             piston_rspy.File(
                 name="main.py",
                 content="for i in range(10): print(i)",
-            ),
+            )
         )
     )
 

@@ -1,6 +1,6 @@
 [project]
 name = "piston_rspy"
-version = "0.1.2"
+version = "0.1.3"
 description = "Python bindings for piston_rs."
 readme = "README.md"
 documentation = "https://jonxslays.github.io/piston_rspy/piston_rspy/"

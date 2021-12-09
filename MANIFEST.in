@@ -1,2 +1,5 @@
 include Cargo.toml
+include piston_rspy/__init__.py
+include piston_rspy/piston_rspy.pyi
+include piston_rspy/py.typed
 recursive-include src *
