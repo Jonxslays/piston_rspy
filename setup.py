@@ -16,6 +16,11 @@ setup(
     long_description_content_type="text/markdown",
     license="MIT",
     url="https://github.com/Jonxslays/piston_rspy",
+    project_urls={
+        "Documentation": "https://jonxslays.github.io/piston_rspy/piston_rspy",
+        "Source": "https://github.com/Jonxslays/piston_rspy",
+        "Bug Tracker": "https://github.com/Jonxslays/piston_rspy/issues",
+    },
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Framework :: AsyncIO",
