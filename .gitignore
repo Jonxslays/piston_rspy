@@ -72,3 +72,5 @@ docs/_build/
 
 # Pyenv
 .python-version
+
+.scripts
