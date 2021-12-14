@@ -181,6 +181,12 @@ impl ExecResponse {
         self.inner.compile.as_ref().map(ExecResult::from_result)
     }
 
+    /// `int`: The response status returned by Piston.
+    #[getter]
+    fn status(&self) -> u16 {
+        self.inner.status
+    }
+
     /// Whether or not the request to Piston succeeded.
     ///
     /// ### Returns:

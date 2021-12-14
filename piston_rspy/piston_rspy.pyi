@@ -166,6 +166,8 @@ class ExecResponse:
         compile: `ExecResult | None`
             The optional result Piston sends detailing compilation.
             This will be `None` for non-compiled languages.
+        status: `int`
+            The response status returned by Piston.
 
     Raises:
         `TypeError`: If the class is instantiated manually.
@@ -175,6 +177,7 @@ class ExecResponse:
     version: str
     run: ExecResult
     compile: ExecResult | None
+    status: int
     def is_ok(self) -> bool:
         """Whether or not the request to Piston succeeded.
 
