@@ -1,5 +1,5 @@
 from setuptools import setup
-from setuptools_rust import Binding, RustExtension # type: ignore
+from setuptools_rust import Binding, RustExtension, Strip  # type: ignore
 
 
 setup_requires = ["setuptools-rust>=0.9.2"]
@@ -38,7 +38,10 @@ setup(
     ],
     rust_extensions=[
         RustExtension(
-            "piston_rspy.piston_rspy", "Cargo.toml", binding=Binding.PyO3, # type: ignore
+            "piston_rspy.piston_rspy",
+            "Cargo.toml",
+            binding=Binding.PyO3,  # type: ignore
+            strip=Strip.Debug,  # type: ignore
         )
     ],
     setup_requires=setup_requires,
