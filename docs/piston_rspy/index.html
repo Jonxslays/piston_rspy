@@ -161,6 +161,10 @@ This will be <code>None</code> for non-compiled languages.</p></div>
 <dd>
 <div class="desc"><p><code><a title="piston_rspy.ExecResult" href="#piston_rspy.ExecResult">ExecResult</a></code>: The result Piston sends detailing execution.</p></div>
 </dd>
+<dt id="piston_rspy.ExecResponse.status"><code class="name">var <span class="ident">status</span></code></dt>
+<dd>
+<div class="desc"><p><code>int</code>: The response status returned by Piston.</p></div>
+</dd>
 <dt id="piston_rspy.ExecResponse.version"><code class="name">var <span class="ident">version</span></code></dt>
 <dd>
 <div class="desc"><p><code>str</code>: The version of the language that was used.</p></div>
@@ -254,7 +258,7 @@ This will be <code>None</code> for non-compiled languages.</p></div>
 </dd>
 <dt id="piston_rspy.Executor"><code class="flex name class">
 <span>class <span class="ident">Executor</span></span>
-<span>(</span><span>language: str = '', version: str = '', files: list = [], stdin: str = '', args: list = [], compile_timeout: int = 10000, run_timeout: int = 3000, compile_memory_limit: int = -1, run_memory_limit: int = -1, /)</span>
+<span>(</span><span>language: str = '', version: str = '*', files: list = [], stdin: str = '', args: list = [], compile_timeout: int = 10000, run_timeout: int = 3000, compile_memory_limit: int = -1, run_memory_limit: int = -1, /)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>&ndash;</p>
@@ -699,6 +703,7 @@ instantiate the class, however.</p>
 <li><code><a title="piston_rspy.ExecResponse.is_ok" href="#piston_rspy.ExecResponse.is_ok">is_ok</a></code></li>
 <li><code><a title="piston_rspy.ExecResponse.language" href="#piston_rspy.ExecResponse.language">language</a></code></li>
 <li><code><a title="piston_rspy.ExecResponse.run" href="#piston_rspy.ExecResponse.run">run</a></code></li>
+<li><code><a title="piston_rspy.ExecResponse.status" href="#piston_rspy.ExecResponse.status">status</a></code></li>
 <li><code><a title="piston_rspy.ExecResponse.version" href="#piston_rspy.ExecResponse.version">version</a></code></li>
 </ul>
 </li>
