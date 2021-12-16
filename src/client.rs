@@ -1,5 +1,4 @@
 use pyo3::prelude::*;
-use pyo3::types::PyList;
 use pyo3::PyObjectProtocol;
 use std::collections::HashMap;
 
@@ -121,22 +120,23 @@ impl Client {
     fn fetch_runtimes<'a>(&self, py: Python<'a>) -> PyResult<&'a PyAny> {
         let client = self.inner.clone();
 
-        pyo3_asyncio::tokio::future_into_py(py, async move {
-            match client.fetch_runtimes().await {
-                Ok(runtimes) => Ok(Python::with_gil(|py| {
-                    PyList::new(
-                        py,
+        pyo3_asyncio::tokio::future_into_py_with_locals::<_, Vec<Runtime>>(
+            py,
+            pyo3_asyncio::tokio::get_current_locals(py)?,
+            async move {
+                match client.fetch_runtimes().await {
+                    Ok(runtimes) => Ok(Python::with_gil(|_| {
                         runtimes
                             .iter()
-                            .map(|r| Runtime::from_runtime(r.to_owned()).into_py(py)),
-                    )
-                    .into()
-                })),
-                Err(e) => Err(Python::with_gil(|_| {
-                    pyo3::exceptions::PyRuntimeError::new_err(format!("{:?}", e))
-                })),
-            }
-        })
+                            .map(|r| Runtime::from_runtime(r.to_owned()))
+                            .collect()
+                    })),
+                    Err(e) => Err(Python::with_gil(|_| {
+                        pyo3::exceptions::PyRuntimeError::new_err(format!("{:?}", e))
+                    })),
+                }
+            },
+        )
     }
 
     /// **async**: Executes code using a given executor. This is an http request.
@@ -160,9 +160,7 @@ impl Client {
 
         pyo3_asyncio::tokio::future_into_py(py, async move {
             match client.execute(&exec).await {
-                Ok(response) => Ok(Python::with_gil(|py| {
-                    ExecResponse::from_response(response).into_py(py)
-                })),
+                Ok(response) => Ok(Python::with_gil(|_| ExecResponse::from_response(response))),
                 Err(e) => Err(Python::with_gil(|_| {
                     pyo3::exceptions::PyRuntimeError::new_err(format!("{:?}", e))
                 })),

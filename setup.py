@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+import typing
+
 from setuptools import setup
 from setuptools_rust import Binding, RustExtension, Strip  # type: ignore
 
@@ -7,19 +11,32 @@ setup_requires = ["setuptools-rust>=0.9.2"]
 with open("README.md") as r:
     long_description = r.read()
 
+with open("pyproject.toml") as f:
+    meta: dict[str, typing.Any] = {}
+
+    for line in f.readlines():
+        if line.startswith("\n"):
+            break
+
+        if line.startswith("[project]"):
+            continue
+
+        k, v = line.split(" = ")
+        meta[k] = v.strip().replace("\"", "")
+
 setup(
-    name="piston_rspy",
-    version="0.3.0",
-    description="Python bindings for piston_rs.",
-    author="Jonxslays",
+    name=meta["name"],
+    version=meta["version"],
+    description=meta["description"],
+    author=meta["author"],
     long_description=long_description,
     long_description_content_type="text/markdown",
     license="MIT",
-    url="https://github.com/Jonxslays/piston_rspy",
+    url=meta["url"],
     project_urls={
-        "Documentation": "https://jonxslays.github.io/piston_rspy/piston_rspy",
-        "Source": "https://github.com/Jonxslays/piston_rspy",
-        "Bug Tracker": "https://github.com/Jonxslays/piston_rspy/issues",
+        "Documentation":meta["documentation"],
+        "Source": meta["repository"],
+        "Bug Tracker": meta["issue-tracker"],
     },
     classifiers=[
         "Development Status :: 3 - Alpha",
