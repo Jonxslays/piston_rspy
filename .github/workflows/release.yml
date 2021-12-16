@@ -41,8 +41,8 @@ jobs:
         - windows
         python-version:
         - '7'
-        - '9'
         - '8'
+        - '9'
         - '10'
         include:
         - os: ubuntu
