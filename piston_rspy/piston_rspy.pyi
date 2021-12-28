@@ -438,6 +438,32 @@ class Client:
             `Client`: The new client.
         """
         ...
+    @staticmethod
+    def with_url(url: str) -> Client:
+        """Creates a new client with a custom url.
+
+        Args:
+            url: `str`
+                The url to use as the underlying Piston backend.
+
+        Returns:
+            `Client`: The new client.
+        """
+        ...
+    @staticmethod
+    def with_url_and_key(url: str, key: str) -> Client:
+        """Creates a new client with a custom url, and an api key.
+
+        Args:
+            url: `str`
+                The url to use as the underlying Piston backend.
+            key: `str`
+                The api key to use.
+
+        Returns:
+            `Client`: The new client.
+        """
+        ...
     def get_headers(self) -> dict[str, str]:
         """The headers being sent with requests.
 

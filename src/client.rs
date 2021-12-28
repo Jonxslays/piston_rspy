@@ -52,6 +52,55 @@ impl Client {
         Self { inner, headers }
     }
 
+    /// Creates a new Client with a custom url and an api key.
+    ///
+    /// ### Args:
+    ///
+    /// - url `str`:
+    /// The url to use as the underlying piston backend.
+    ///
+    /// - key `str`:
+    /// The api key to use.
+    ///
+    /// ### Returns:
+    ///
+    /// - `Client`: The new client.
+    #[staticmethod]
+    #[pyo3(text_signature = "(key: str, /) -> Client")]
+    fn with_url_and_key(url: String, key: String) -> Self {
+        let inner = Client_::with_url_and_key(&url, &key);
+        let headers = inner
+            .get_headers()
+            .iter()
+            .map(|(key, value)| (key.to_string(), value.to_str().unwrap().to_string()))
+            .collect();
+
+        Self { inner, headers }
+    }
+
+    /// Creates a new Client with a custom url.
+    ///
+    /// ### Args:
+    ///
+    /// - url `str`:
+    /// The url to use as the underlying piston backend.
+    ///
+    /// ### Returns:
+    ///
+    /// - `Client`: The new client.
+    #[staticmethod]
+    #[pyo3(text_signature = "(key: str, /) -> Client")]
+    fn with_url(url: String) -> Self {
+        let inner = Client_::with_url(&url);
+        let headers = inner
+            .get_headers()
+            .iter()
+            .map(|(key, value)| (key.to_string(), value.to_str().unwrap().to_string()))
+            .collect();
+
+        Self { inner, headers }
+    }
+
     /// Creates a new client, with an api key.
     ///
     /// ### Args:
