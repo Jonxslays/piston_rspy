@@ -62,6 +62,44 @@ The api key to use.</li>
 <li><code><a title="piston_rspy.Client" href="#piston_rspy.Client">Client</a></code>: The new client.</li>
 </ul></div>
 </dd>
+<dt id="piston_rspy.Client.with_url"><code class="name flex">
+<span>def <span class="ident">with_url</span></span>(<span>key: str, /) ‑> <a title="piston_rspy.Client" href="#piston_rspy.Client">Client</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>&ndash;</p>
+<p>Creates a new Client with a custom url.</p>
+<h3 id="args">Args:</h3>
+<ul>
+<li>url <code>str</code>:
+The url to use as the underlying piston backend.</li>
+</ul>
+<h3 id="returns">Returns:</h3>
+<ul>
+<li><code><a title="piston_rspy.Client" href="#piston_rspy.Client">Client</a></code>: The new client.</li>
+</ul></div>
+</dd>
+<dt id="piston_rspy.Client.with_url_and_key"><code class="name flex">
+<span>def <span class="ident">with_url_and_key</span></span>(<span>key: str, /) ‑> <a title="piston_rspy.Client" href="#piston_rspy.Client">Client</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>&ndash;</p>
+<p>Creates a new Client with a custom url and an api key.</p>
+<h3 id="args">Args:</h3>
+<ul>
+<li>
+<p>url <code>str</code>:
+The url to use as the underlying piston backend.</p>
+</li>
+<li>
+<p>key <code>str</code>:
+The api key to use.</p>
+</li>
+</ul>
+<h3 id="returns">Returns:</h3>
+<ul>
+<li><code><a title="piston_rspy.Client" href="#piston_rspy.Client">Client</a></code>: The new client.</li>
+</ul></div>
+</dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
@@ -97,7 +135,7 @@ The executor to use for the request.</li>
 </ul></div>
 </dd>
 <dt id="piston_rspy.Client.fetch_runtimes"><code class="name flex">
-<span>def <span class="ident">fetch_runtimes</span></span>(<span>self) ‑> list</span>
+<span>def <span class="ident">fetch_runtimes</span></span>(<span>self) ‑> list[<a title="piston_rspy.Runtime" href="#piston_rspy.Runtime">Runtime</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>&ndash;</p>
@@ -112,7 +150,7 @@ The executor to use for the request.</li>
 </ul></div>
 </dd>
 <dt id="piston_rspy.Client.get_headers"><code class="name flex">
-<span>def <span class="ident">get_headers</span></span>(<span>self) ‑> dict</span>
+<span>def <span class="ident">get_headers</span></span>(<span>self) ‑> dict[str, str]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>&ndash;</p>
@@ -258,7 +296,7 @@ This will be <code>None</code> for non-compiled languages.</p></div>
 </dd>
 <dt id="piston_rspy.Executor"><code class="flex name class">
 <span>class <span class="ident">Executor</span></span>
-<span>(</span><span>language: str = '', version: str = '*', files: list = [], stdin: str = '', args: list = [], compile_timeout: int = 10000, run_timeout: int = 3000, compile_memory_limit: int = -1, run_memory_limit: int = -1, /)</span>
+<span>(</span><span>language: str = '', version: str = '*', files: list[<a title="piston_rspy.File" href="#piston_rspy.File">File</a>] = [], stdin: str = '', args: list[str] = [], compile_timeout: int = 10000, run_timeout: int = 3000, compile_memory_limit: int = -1, run_memory_limit: int = -1, /)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>&ndash;</p>
@@ -329,7 +367,7 @@ The arg to add.</li>
 </ul></div>
 </dd>
 <dt id="piston_rspy.Executor.add_args"><code class="name flex">
-<span>def <span class="ident">add_args</span></span>(<span>self, args: list, /) ‑> <a title="piston_rspy.Executor" href="#piston_rspy.Executor">Executor</a></span>
+<span>def <span class="ident">add_args</span></span>(<span>self, args: list[str], /) ‑> <a title="piston_rspy.Executor" href="#piston_rspy.Executor">Executor</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>&ndash;</p>
@@ -363,7 +401,7 @@ The file to add.</li>
 </ul></div>
 </dd>
 <dt id="piston_rspy.Executor.add_files"><code class="name flex">
-<span>def <span class="ident">add_files</span></span>(<span>self, files: list, /) ‑> <a title="piston_rspy.Executor" href="#piston_rspy.Executor">Executor</a></span>
+<span>def <span class="ident">add_files</span></span>(<span>self, files: list[<a title="piston_rspy.File" href="#piston_rspy.File">File</a>], /) ‑> <a title="piston_rspy.Executor" href="#piston_rspy.Executor">Executor</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>&ndash;</p>
@@ -400,7 +438,7 @@ configured again and sent to Piston after metadata is added.</p>
 <p>This method mutates the executor in place.</p></div>
 </dd>
 <dt id="piston_rspy.Executor.set_args"><code class="name flex">
-<span>def <span class="ident">set_args</span></span>(<span>self, args: list, /)</span>
+<span>def <span class="ident">set_args</span></span>(<span>self, args: list[str], /)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>&ndash;</p>
@@ -446,7 +484,7 @@ The timeout to set.</li>
 </ul></div>
 </dd>
 <dt id="piston_rspy.Executor.set_files"><code class="name flex">
-<span>def <span class="ident">set_files</span></span>(<span>self, files: list, /)</span>
+<span>def <span class="ident">set_files</span></span>(<span>self, files: list[<a title="piston_rspy.File" href="#piston_rspy.File">File</a>], /)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>&ndash;</p>
@@ -628,7 +666,7 @@ The name to use.</li>
 </dd>
 <dt id="piston_rspy.Runtime"><code class="flex name class">
 <span>class <span class="ident">Runtime</span></span>
-<span>(</span><span>language: str, version: str, aliases: list, /)</span>
+<span>(</span><span>language: str, version: str, aliases: list[str], /)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>&ndash;</p>
@@ -693,6 +731,8 @@ instantiate the class, however.</p>
 <li><code><a title="piston_rspy.Client.headers" href="#piston_rspy.Client.headers">headers</a></code></li>
 <li><code><a title="piston_rspy.Client.url" href="#piston_rspy.Client.url">url</a></code></li>
 <li><code><a title="piston_rspy.Client.with_key" href="#piston_rspy.Client.with_key">with_key</a></code></li>
+<li><code><a title="piston_rspy.Client.with_url" href="#piston_rspy.Client.with_url">with_url</a></code></li>
+<li><code><a title="piston_rspy.Client.with_url_and_key" href="#piston_rspy.Client.with_url_and_key">with_url_and_key</a></code></li>
 </ul>
 </li>
 <li>
