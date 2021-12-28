@@ -2,6 +2,10 @@
 
 Python bindings for [`piston_rs`](https://github.com/Jonxslays/piston_rs).
 
+![PyPI](https://img.shields.io/pypi/v/piston_rspy)
+![GitHub](https://img.shields.io/github/license/Jonxslays/piston_rspy)
+[![Downloads](https://pepy.tech/badge/piston-rspy)](https://pepy.tech/project/piston-rspy)
+
 # What is piston_rspy
 
 piston_rspy provides Python users the ability to interact with the
