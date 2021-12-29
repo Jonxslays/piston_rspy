@@ -1,30 +1,31 @@
-# piston_rspy
+<h1 align="center">piston_rspy</h1>
+<p align="center">
+<a href="https://pypi.python.org/pypi/piston_rspy/"><img height="20" alt="PyPI" src="https://img.shields.io/pypi/v/piston_rspy.svg"></a>
+<a href="https://github.com/Jonxslays/piston_rspy/blob/master/LICENSE"><img height="20" alt="License" src="https://img.shields.io/github/license/Jonxslays/piston_rspy"></a>
+<a href="https://pepy.tech/project/piston-rspy"><img height="20" alt="Build" src="https://pepy.tech/badge/piston-rspy"></a>
+</p>
 
-Python bindings for [`piston_rs`](https://github.com/Jonxslays/piston_rs).
+<p align="center">Python bindings for <a href="https://github.com/Jonxslays/piston_rs"><code>piston_rs</code></a>.</p>
 
-![PyPI](https://img.shields.io/pypi/v/piston_rspy)
-![GitHub](https://img.shields.io/github/license/Jonxslays/piston_rspy)
-[![Downloads](https://pepy.tech/badge/piston-rspy)](https://pepy.tech/project/piston-rspy)
-
-# What is piston_rspy
+## What is piston_rspy?
 
 piston_rspy provides Python users the ability to interact with the
 [Piston](https://github.com/engineer-man/piston) code execution engine,
 but behind the scenes it is powered by [piston_rs](https://github.com/Jonxslays/piston_rs),
 a Rust library designed for the same purpose.
 
-# Getting started
+## Getting started
 
 piston_rspy officially supports Python versions 3.7, 3.8, 3.9, and 3.10.
 For an in depth look at the API, check out the [documentation](https://jonxslays.github.io/piston_rspy/piston_rspy/)!
 
-#### Installation
+### Installation
 
 ```bash
 pip install piston_rspy
 ```
 
-#### Usage
+### Usage
 
 Fetching the available runtimes from Piston.
 ```py
