@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from .piston_rspy import *
-
 __all__: list[str] = [
     "Runtime",
     "File",
@@ -15,3 +13,5 @@ __all__: list[str] = [
 
 __pdoc__: dict[str, bool] = {}
 __pdoc__["piston_rspy.piston_rspy"] = False
+
+from .piston_rspy import *

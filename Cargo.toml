@@ -20,4 +20,4 @@ crate-type = ["cdylib"]
 pyo3 = { version = "0.15", features = ["extension-module"] }
 pyo3-asyncio = { version = "0.15", features = ["tokio-runtime"] }
 tokio = { version = "1" }
-piston_rs = "^0.4.1"
+piston_rs = "^0.4.2"
