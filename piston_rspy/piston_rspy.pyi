@@ -60,15 +60,28 @@ class File:
     name: str = ""
     content: str = ""
     encoding: str = "utf8"
-    def set_name(self, name: str) -> File:
-        """Sets the name of the file.
+    @classmethod
+    def load_from(cls, path: str) -> File:
+        """Creates a new `File` from an existing file on disk.
 
         Args:
-            name: `str`
-                The name to use.
+            path: `str`
+                The path to the file.
 
         Returns:
-            `File`: The file, for chained method calls.
+            `File`: The new file.
+        """
+        ...
+    @staticmethod
+    def load_contents(path: str) -> str:
+        """Loads the contents of the given file.
+
+        Args:
+            path: `str`
+                The path to the file.
+
+        Returns:
+            `str`: The file's contents.
         """
         ...
     def set_content(self, content: str) -> File:
@@ -77,6 +90,29 @@ class File:
         Args:
             content: `str`
                 The content to use.
+
+        Returns:
+            `File`: The file, for chained method calls.
+        """
+        ...
+    def load_content_from(self, path: str) -> File:
+        """Sets the content of th efile to the contents of an existing
+        file on disk.
+
+        Args:
+            path: `str`
+                The path to the file.
+
+        Returns:
+            `File`: The file, for chained method calls.
+        """
+        ...
+    def set_name(self, name: str) -> File:
+        """Sets the name of the file.
+
+        Args:
+            name: `str`
+                The name to use.
 
         Returns:
             `File`: The file, for chained method calls.
