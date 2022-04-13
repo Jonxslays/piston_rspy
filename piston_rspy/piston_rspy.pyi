@@ -96,7 +96,7 @@ class File:
         """
         ...
     def load_content_from(self, path: str) -> File:
-        """Sets the content of th efile to the contents of an existing
+        """Sets the content of the file to the contents of an existing
         file on disk.
 
         Args:
