@@ -37,7 +37,7 @@ impl ExecResult {
         stdout: String,
         stderr: String,
         output: String,
-        code: isize,
+        code: Option<isize>,
         signal: Option<String>,
     ) -> Self {
         Self {
@@ -85,9 +85,9 @@ impl ExecResult {
         self.inner.output.clone()
     }
 
-    /// `int`: The exit code returned by the process.
+    /// `int | None`: The optional exit code returned by the process.
     #[getter]
-    fn code(&self) -> isize {
+    fn code(&self) -> Option<isize> {
         self.inner.code
     }
 

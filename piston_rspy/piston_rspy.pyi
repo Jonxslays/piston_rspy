@@ -117,8 +117,8 @@ class ExecResult:
         output: `str`
             The text sent to both `stdout`, and `stderr` during
             execution.
-        code: `int`
-            The exit code returned by the process.
+        code: `int | None`
+            The optional exit code returned by the process.
         signal: `str | None`
             The optional signal sent to the process. (`SIGKILL` etc)
 
@@ -129,7 +129,7 @@ class ExecResult:
     stdout: str
     stderr: str
     output: str
-    code: int
+    code: int | None
     signal: str | None
     def is_ok(self) -> bool:
         """Whether or not the execution was ok.
