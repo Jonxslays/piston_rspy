@@ -3,6 +3,7 @@ use pyo3::PyObjectProtocol;
 
 use piston_rs::File as File_;
 use piston_rs::Runtime as Runtime_;
+use pyo3::types::PyType;
 
 /// A runtime available to be used by Piston.
 ///
@@ -215,6 +216,53 @@ impl File {
     fn set_encoding(mut slf: PyRefMut<Self>, encoding: String) -> PyRefMut<Self> {
         slf.inner.encoding = encoding;
         slf
+    }
+
+    /// Creates a new `File` from an existing file on disk.
+    ///
+    /// ### Args:
+    ///
+    /// - path `str`:
+    /// The path to the file.
+    ///
+    /// ### Returns:
+    ///
+    /// - `File`: The new file.
+    #[classmethod]
+    #[pyo3(text_signature = "(cls, path: str, /) -> File")]
+    fn load_from(_cls: &PyType, path: String) -> PyResult<Self> {
+        match File_::load_from(path.as_str()) {
+            Ok(file) => Ok(Python::with_gil(|_| Self { inner: file })),
+            Err(err) => Err(Python::with_gil(|_| {
+                pyo3::exceptions::PyRuntimeError::new_err(format!("{:?}", err.details))
+            })),
+        }
+    }
+
+    /// Sets the content of the file to the contents of an existing
+    /// file on disk.
+    ///
+    /// ### Args:
+    ///
+    /// - path `str`:
+    /// The path to the file.
+    ///
+    /// ### Returns:
+    ///
+    /// - `File`: The file, for chained method calls.
+    #[pyo3(text_signature = "(self, path: str, /) -> File")]
+    fn load_content_from(mut slf: PyRefMut<Self>, path: String) -> PyResult<PyRefMut<Self>> {
+        let file = slf.inner.clone();
+
+        match file.load_content_from(path.as_str()) {
+            Ok(file) => {
+                slf.inner.content = file.content;
+                Ok(slf)
+            }
+            Err(err) => Err(Python::with_gil(|_| {
+                pyo3::exceptions::PyRuntimeError::new_err(format!("{:?}", err.details))
+            })),
+        }
     }
 
     /// Copies the file, leaving the existing one unchanged.
