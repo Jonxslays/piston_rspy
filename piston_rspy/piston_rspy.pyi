@@ -72,18 +72,6 @@ class File:
             `File`: The new file.
         """
         ...
-    @staticmethod
-    def load_contents(path: str) -> str:
-        """Loads the contents of the given file.
-
-        Args:
-            path: `str`
-                The path to the file.
-
-        Returns:
-            `str`: The file's contents.
-        """
-        ...
     def set_content(self, content: str) -> File:
         """Sets the content of the file.
 
