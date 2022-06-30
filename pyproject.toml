@@ -1,14 +1,9 @@
 [project]
 name = "piston_rspy"
-version = "0.3.2"
+version = "0.4.0"
 description = "Python bindings for piston_rs."
-readme = "README.md"
-author = "Jonxslays"
-documentation = "https://jonxslays.github.io/piston_rspy/piston_rspy"
-issue-tracker = "https://github.com/Jonxslays/piston_rspy/issues"
-repository = "https://github.com/Jonxslays/piston_rspy"
-url = "https://github.com/Jonxslays/piston_rspy"
 requires-python = ">=3.7,<3.11"
+readme = "README.md"
 
 [tool.pyright]
 typeCheckingMode = "strict"
