@@ -1,5 +1,5 @@
-black==21.11b1
+black==22.6.0
 maturin==0.12.2
 pdoc3==0.10.0
-pyright==0.0.13
+pyright==1.1.256
 setuptools_rust==1.1.2
