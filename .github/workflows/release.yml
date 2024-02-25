@@ -52,8 +52,6 @@ jobs:
 
       - name: Install built wheel - x86_64
         run: |
-          python -m venv .venv
-          source .venv/bin/activate
           pip install piston_rspy --no-index --find-links dist --force-reinstall
           python -c "import piston_rspy"
 
@@ -102,8 +100,6 @@ jobs:
 
       - name: Install built wheel - ${{ matrix.target }}
         run: |
-          python -m venv .venv
-          .\.venv\Scripts\activate
           pip install piston_rspy --no-index --find-links dist --force-reinstall
           python -c "import piston_rspy"
 
@@ -140,8 +136,6 @@ jobs:
       - name: Install built wheel - ${{ matrix.target }}
         if: matrix.target == 'x86_64'
         run: |
-          python -m venv .venv
-          source .venv/bin/activate
           pip install piston_rspy --no-index --find-links dist --force-reinstall
           python -c "import piston_rspy"
 
@@ -186,8 +180,6 @@ jobs:
             apt-get install -y --no-install-recommends python3 python3-pip
             pip3 install -U pip
           run: |
-            python3 -m venv .venv
-            source .venv/bin/activate
             pip3 install piston_rspy --no-index --find-links dist/ --force-reinstall
             python3 -c "import piston_rspy"
 
@@ -230,8 +222,6 @@ jobs:
           run: |
             apk add py3-pip
             pip3 install -U pip
-            python3 -m venv .venv
-            source .venv/bin/activate
             pip3 install piston_rspy --no-index --find-links /io/dist/ --force-reinstall
             python3 -c "import piston_rspy"
 
@@ -278,8 +268,6 @@ jobs:
             apk add py3-pip
             pip3 install -U pip
           run: |
-            python3 -m venv .venv
-            source .venv/bin/activate
             pip3 install piston_rspy --no-index --find-links dist/ --force-reinstall
             python3 -c "import piston_rspy"
 
@@ -288,3 +276,32 @@ jobs:
         with:
           name: wheels
           path: dist
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
+    needs:
+      [
+        version-check,
+        macos,
+        windows,
+        linux,
+        linux-cross,
+        musllinux,
+        musllinux-cross
+      ]
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: wheels
+
+      - name: Publish to PyPI
+        uses: messense/maturin-action@v1
+        env:
+          MATURIN_PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+        with:
+          command: upload
+          args: --skip-existing *
