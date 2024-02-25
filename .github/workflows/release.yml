@@ -272,7 +272,7 @@ jobs:
             source .venv/bin/activate
             pip3 install -U pip
             pip3 install piston_rspy --no-index --find-links dist/ --force-reinstall
-            python3 -c "import piston_rspy"
+            cd dist && python3 -c "import piston_rspy"
 
       - name: Upload wheels
         uses: actions/upload-artifact@v3
