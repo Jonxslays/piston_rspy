@@ -1,5 +1,4 @@
 use pyo3::prelude::*;
-use pyo3::PyObjectProtocol;
 
 use piston_rs::File as File_;
 use piston_rs::Runtime as Runtime_;
@@ -27,17 +26,6 @@ impl Runtime {
     }
 }
 
-#[pyproto]
-impl PyObjectProtocol for Runtime {
-    fn __repr__(&self) -> PyResult<String> {
-        Ok(format!("{:?}", self.inner))
-    }
-
-    fn __str__(&self) -> PyResult<String> {
-        self.__repr__()
-    }
-}
-
 #[pymethods]
 impl Runtime {
     #[new]
@@ -49,6 +37,14 @@ impl Runtime {
                 aliases,
             },
         }
+    }
+
+    fn __repr__(&self) -> PyResult<String> {
+        Ok(format!("{:?}", self.inner))
+    }
+
+    fn __str__(&self) -> PyResult<String> {
+        self.__repr__()
     }
 
     /// `str`: The language.
@@ -90,17 +86,6 @@ pub struct File {
     inner: File_,
 }
 
-#[pyproto]
-impl PyObjectProtocol for File {
-    fn __repr__(&self) -> PyResult<String> {
-        Ok(format!("{:?}", self.inner))
-    }
-
-    fn __str__(&self) -> PyResult<String> {
-        self.__repr__()
-    }
-}
-
 impl File {
     /// Generates a new `File` from the inner `piston_rs.File`.
     pub fn from_inner(inner: &File_) -> Self {
@@ -122,11 +107,7 @@ impl File {
 #[pymethods]
 impl File {
     #[new]
-    #[args(
-        name = "\"\".to_string()",
-        content = "\"\".to_string()",
-        encoding = "\"utf8\".to_string()"
-    )]
+    #[pyo3(signature = (name="".to_string(), content = "".to_string(), encoding = "utf8".to_string()))]
     fn new(name: String, content: String, encoding: String) -> Self {
         Self {
             inner: File_ {
@@ -135,6 +116,14 @@ impl File {
                 encoding,
             },
         }
+    }
+
+    fn __repr__(&self) -> PyResult<String> {
+        Ok(format!("{:?}", self.inner))
+    }
+
+    fn __str__(&self) -> PyResult<String> {
+        self.__repr__()
     }
 
     /// `str`: The name of the file.

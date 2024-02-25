@@ -1,9 +1,35 @@
 [project]
 name = "piston_rspy"
-version = "0.4.1"
+version = "0.4.2"
 description = "Python bindings for piston_rs."
-requires-python = ">=3.7,<3.12"
+requires-python = ">=3.8,<3.13"
+authors = [{ name = "Jonxslays" }]
+license = { file = "LICENSE" }
 readme = "README.md"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Framework :: AsyncIO",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+
+[project.urls]
+homepage = "https://github.com/Jonxslays/piston_rspy"
+repository = "https://github.com/Jonxslays/piston_rspy"
+documentation = "https://jonxslays.github.io/piston_rspy/piston_rspy/"
+
+[tool.maturin]
+strip = true
 
 [tool.pyright]
 typeCheckingMode = "strict"
@@ -13,6 +39,5 @@ include = ["piston_rspy"]
 line-length = 99
 
 [build-system]
-# requires = ["maturin>=0.12,<0.13"]
-# build-backend = "maturin"
-requires = ["setuptools", "wheel", "setuptools-rust"]
+requires = ["maturin~=1.4.0"]
+build-backend = "maturin"

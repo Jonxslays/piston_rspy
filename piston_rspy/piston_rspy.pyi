@@ -3,14 +3,14 @@ from __future__ import annotations
 import typing as t
 from dataclasses import dataclass, field
 
-__all__: list[str] = [
+__all__ = (
     "Runtime",
     "File",
     "ExecResult",
     "ExecResponse",
     "Executor",
     "Client",
-]
+)
 
 @dataclass(frozen=True)
 class Runtime:
@@ -35,7 +35,7 @@ class Runtime:
 
     language: str
     version: str
-    aliases: list[str]
+    aliases: t.List[str]
     def copy(self) -> Runtime:
         """Copies the runtime, leaving the existing one unchanged.
 
@@ -72,6 +72,7 @@ class File:
             `File`: The new file.
         """
         ...
+
     def set_content(self, content: str) -> File:
         """Sets the content of the file.
 
@@ -83,6 +84,7 @@ class File:
             `File`: The file, for chained method calls.
         """
         ...
+
     def load_content_from(self, path: str) -> File:
         """Sets the content of the file to the contents of an existing
         file on disk.
@@ -95,6 +97,7 @@ class File:
             `File`: The file, for chained method calls.
         """
         ...
+
     def set_name(self, name: str) -> File:
         """Sets the name of the file.
 
@@ -106,6 +109,7 @@ class File:
             `File`: The file, for chained method calls.
         """
         ...
+
     def set_encoding(self, encoding: str) -> File:
         """Sets the encoding of the file.
 
@@ -117,6 +121,7 @@ class File:
             `File`: The file, for chained method calls.
         """
         ...
+
     def copy(self) -> File:
         """Copies the file, leaving the existing one unchanged.
 
@@ -153,8 +158,8 @@ class ExecResult:
     stdout: str
     stderr: str
     output: str
-    code: int | None
-    signal: str | None
+    code: t.Optional[int]
+    signal: t.Optional[str]
     def is_ok(self) -> bool:
         """Whether or not the execution was ok.
 
@@ -162,6 +167,7 @@ class ExecResult:
             `bool`: `True` if the execution returned a zero exit code.
         """
         ...
+
     def is_err(self) -> bool:
         """Whether or not the execution produced errors.
 
@@ -200,7 +206,7 @@ class ExecResponse:
     language: str
     version: str
     run: ExecResult
-    compile: ExecResult | None
+    compile: t.Optional[ExecResult]
     status: int
     def is_ok(self) -> bool:
         """Whether or not the request to Piston succeeded.
@@ -209,6 +215,7 @@ class ExecResponse:
             `bool`: `True` if a 200 status code was received.
         """
         ...
+
     def is_err(self) -> bool:
         """Whether or not the request to Piston failed.
 
@@ -252,9 +259,9 @@ class Executor:
 
     language: str = ""
     version: str = "*"
-    files: list[File] = field(default_factory=list)
+    files: t.List[File] = field(default_factory=list)
     stdin: str = ""
-    args: list[str] = field(default_factory=list)
+    args: t.List[str] = field(default_factory=list)
     compile_timeout: int = 10000
     run_timeout: int = 3000
     compile_memory_limit: int = -1
@@ -266,6 +273,7 @@ class Executor:
             `Executor`: A copy of the executor.
         """
         ...
+
     def reset(self) -> None:
         """Resets the executor back to a `new` state, ready to be
         configured again and sent to Piston after metadata is added.
@@ -273,6 +281,7 @@ class Executor:
         - This method mutates the executor in place.
         """
         ...
+
     def set_language(self, language: str) -> Executor:
         """Sets the language to use for execution.
 
@@ -284,6 +293,7 @@ class Executor:
             `Executor`: The executor, for chained method calls.
         """
         ...
+
     def set_version(self, version: str) -> Executor:
         """Sets the version of the language to use for execution.
 
@@ -295,6 +305,7 @@ class Executor:
             `Executor`: The executor, for chained method calls.
         """
         ...
+
     def add_file(self, file: File) -> Executor:
         """Adds a `File` containing the code to be executed.
 
@@ -308,7 +319,8 @@ class Executor:
             `Executor`: The executor, for chained method calls.
         """
         ...
-    def add_files(self, files: list[File]) -> Executor:
+
+    def add_files(self, files: t.List[File]) -> Executor:
         """Adds multiple `File`'s containing the code to be executed.
 
         - Does not overwrite any existing files.
@@ -321,7 +333,8 @@ class Executor:
             `Executor`: The executor, for chained method calls.
         """
         ...
-    def set_files(self, files: list[File]) -> None:
+
+    def set_files(self, files: t.List[File]) -> None:
         """Adds multiple `File`'s containing the code to be executed.
 
         - This method mutates the executor in place.
@@ -332,6 +345,7 @@ class Executor:
                 The files to replace existing files with.
         """
         ...
+
     def set_stdin(self, stdin: str) -> Executor:
         """Sets the text to pass as `stdin` to the program.
 
@@ -343,6 +357,7 @@ class Executor:
             `Executor`: The executor, for chained method calls.
         """
         ...
+
     def add_arg(self, arg: str) -> Executor:
         """Adds an arg to be passed as a command line argument.
 
@@ -356,7 +371,8 @@ class Executor:
             `Executor`: The executor, for chained method calls.
         """
         ...
-    def add_args(self, args: list[str]) -> Executor:
+
+    def add_args(self, args: t.List[str]) -> Executor:
         """Adds multiple args to be passed as a command line argument.
 
         - Does not overwrite any existing args.
@@ -369,7 +385,8 @@ class Executor:
             `Executor`: The executor, for chained method calls.
         """
         ...
-    def set_args(self, args: list[str]) -> None:
+
+    def set_args(self, args: t.List[str]) -> None:
         """Adds multiple args to be passed as command line arguments.
 
         - This method mutates the executor in place.
@@ -380,6 +397,7 @@ class Executor:
                 The args to replace existing args with.
         """
         ...
+
     def set_compile_timeout(self, timeout: int) -> Executor:
         """Sets the maximum allowed time for compilation in
         milliseconds.
@@ -392,6 +410,7 @@ class Executor:
             `Executor`: The executor, for chained method calls.
         """
         ...
+
     def set_run_timeout(self, timeout: int) -> Executor:
         """Sets the maximum allowed time for execution in milliseconds.
 
@@ -403,6 +422,7 @@ class Executor:
             `Executor`: The executor, for chained method calls.
         """
         ...
+
     def set_compile_memory_limit(self, limit: int) -> Executor:
         """Sets the maximum allowed memory usage for compilation in
         bytes.
@@ -415,6 +435,7 @@ class Executor:
             `Executor`: The executor, for chained method calls.
         """
         ...
+
     def set_run_memory_limit(self, limit: int) -> Executor:
         """Sets the maximum allowed memory usage for execution in bytes.
 
@@ -443,7 +464,7 @@ class Client:
     """
 
     url: str = field(init=False, default="https://emkc.org/api/v2/piston")
-    headers: dict[str, str] = field(
+    headers: t.Dict[str, str] = field(
         init=False,
         default_factory=lambda: {
             "Accept": "application/json",
@@ -462,6 +483,7 @@ class Client:
             `Client`: The new client.
         """
         ...
+
     @staticmethod
     def with_url(url: str) -> Client:
         """Creates a new client with a custom url.
@@ -474,6 +496,7 @@ class Client:
             `Client`: The new client.
         """
         ...
+
     @staticmethod
     def with_url_and_key(url: str, key: str) -> Client:
         """Creates a new client with a custom url, and an api key.
@@ -488,21 +511,8 @@ class Client:
             `Client`: The new client.
         """
         ...
-    def get_headers(self) -> dict[str, str]:
-        """The headers being sent with requests.
 
-        Returns:
-            `dict[str, str]`: The headers.
-        """
-        ...
-    def get_url(self) -> str:
-        """The base url for the Piston v2 api.
-
-        Returns:
-            `str`: The url.
-        """
-        ...
-    async def fetch_runtimes(self) -> list[Runtime]:
+    async def fetch_runtimes(self) -> t.List[Runtime]:
         """`async` Fetches the runtimes from Piston. This is an http
         request.
 
@@ -514,6 +524,7 @@ class Client:
             `RuntimeError`: If the request to Piston failed.
         """
         ...
+
     async def execute(self, executor: Executor) -> ExecResponse:
         """`async` Executes code using a given executor. This is an http
         request.
