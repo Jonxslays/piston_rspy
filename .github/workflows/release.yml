@@ -301,7 +301,8 @@ jobs:
     if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
     needs: [
         version-check,
-        macos,
+        macos-x86,
+        macos-universal2,
         windows,
         linux,
         linux-cross,
