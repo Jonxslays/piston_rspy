@@ -512,22 +512,6 @@ class Client:
         """
         ...
 
-    def get_headers(self) -> t.Dict[str, str]:
-        """The headers being sent with requests.
-
-        Returns:
-            `dict[str, str]`: The headers.
-        """
-        ...
-
-    def get_url(self) -> str:
-        """The base url for the Piston v2 api.
-
-        Returns:
-            `str`: The url.
-        """
-        ...
-
     async def fetch_runtimes(self) -> t.List[Runtime]:
         """`async` Fetches the runtimes from Piston. This is an http
         request.
