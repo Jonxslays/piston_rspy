@@ -150,7 +150,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [aarch64, armv7, s390x, ppc64le, ppc64]
+        target: [aarch64, armv7, s390x, ppc64le]
 
     steps:
       - name: Checkout code
@@ -160,12 +160,6 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: 3.9
-
-      - name: Install powerpc gcc
-        if: matrix.target == 'ppc64'
-        run: | # wtf such a hack
-          sudo apt-get install gcc-powerpc-linux-gnu
-          which powerpc-linux-gnu-gcc
 
       - name: Build wheels - ${{ matrix.target }}
         uses: PyO3/maturin-action@v1
