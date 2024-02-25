@@ -16,7 +16,7 @@ a Rust library designed for the same purpose.
 
 ## Getting started
 
-piston_rspy officially supports Python versions 3.7, 3.8, 3.9, 3.10, and 3.11.
+piston_rspy officially supports Python versions 3.8, 3.9, 3.10, 3.11, and 3.12.
 
 For an in depth look at the API, check out the [documentation](https://jonxslays.github.io/piston_rspy/piston_rspy/)!
 
@@ -29,6 +29,7 @@ pip install piston_rspy
 ### Usage
 
 Fetching the available runtimes from Piston.
+
 ```py
 import asyncio
 
@@ -49,6 +50,7 @@ if __name__ == "__main__":
 ---
 
 Executing python code via Piston.
+
 ```py
 import asyncio
 
@@ -86,6 +88,7 @@ if __name__ == "__main__":
 
 The builder flow that is used in `piston_rs` is available in
 `piston_rspy` as well.
+
 ```py
 import asyncio
 
