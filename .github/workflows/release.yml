@@ -163,7 +163,9 @@ jobs:
 
       - name: Install powerpc gcc
         if: matrix.target == 'ppc64'
-        run: sudo apt-get install gcc-powerpc-linux-gnu
+        run: | # wtf such a hack
+          sudo apt-get install gcc-powerpc-linux-gnu
+          sudo cp $(which gcc-powerpc-linux-gnu) /usr/bin/powerpc-linux-gnu-gcc
 
       - name: Build wheels - ${{ matrix.target }}
         uses: PyO3/maturin-action@v1
