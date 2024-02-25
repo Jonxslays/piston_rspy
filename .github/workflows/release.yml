@@ -48,7 +48,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: x86_64
-          args: --release -i 3.8 3.9 3.10 3.11 3.12 --o dist --sdist
+          args: --release -i 3.8 3.9 3.10 3.11 3.12 -o dist --sdist
 
       - name: Install built wheel - x86_64
         run: |
@@ -61,7 +61,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: universal2-apple-darwin
-          args: --release -i 3.8 3.9 3.10 3.11 3.12 --o dist
+          args: --release -i 3.8 3.9 3.10 3.11 3.12 -o dist
 
       - name: Install built wheel - universal2
         run: |
@@ -97,7 +97,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.target }}
-          args: --release -i 3.8 3.9 3.10 3.11 3.12 --o dist
+          args: --release -i 3.8 3.9 3.10 3.11 3.12 -o dist
 
       - name: Install built wheel - ${{ matrix.target }}
         run: |
@@ -133,7 +133,7 @@ jobs:
         with:
           target: ${{ matrix.target }}
           manylinux: auto
-          args: --release -i 3.8 3.9 3.10 3.11 3.12 --o dist
+          args: --release -i 3.8 3.9 3.10 3.11 3.12 -o dist
 
       - name: Install built wheel - ${{ matrix.target }}
         if: matrix.target == 'x86_64'
@@ -169,7 +169,7 @@ jobs:
         with:
           target: ${{ matrix.target }}
           manylinux: auto
-          args: --release -i 3.8 3.9 3.10 3.11 3.12 --o dist
+          args: --release -i 3.8 3.9 3.10 3.11 3.12 -o dist
 
       - name: Install built wheel - ${{ matrix.target }}
         uses: uraimo/run-on-arch-action@v2.7.1
@@ -215,7 +215,7 @@ jobs:
         with:
           target: ${{ matrix.target }}
           manylinux: musllinux_1_2
-          args: --release -i 3.8 3.9 3.10 3.11 3.12 --o dist
+          args: --release -i 3.8 3.9 3.10 3.11 3.12 -o dist
 
       - name: Install built wheel - ${{ matrix.target }}
         if: matrix.target == 'x86_64-unknown-linux-musl'
@@ -261,7 +261,7 @@ jobs:
         with:
           target: ${{ matrix.platform.target }}
           manylinux: musllinux_1_2
-          args: --release -i 3.8 3.9 3.10 3.11 3.12 --o dist
+          args: --release -i 3.8 3.9 3.10 3.11 3.12 -o dist
 
       - name: Install built wheel - ${{ matrix.platform.arch }}
         uses: uraimo/run-on-arch-action@v2.7.1
