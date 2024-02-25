@@ -170,7 +170,6 @@ jobs:
 
       - name: Install built wheel - ${{ matrix.target }}
         uses: uraimo/run-on-arch-action@v2.6.0
-        if: matrix.target != 'ppc64'
         with:
           arch: ${{ matrix.target }}
           distro: ubuntu20.04
