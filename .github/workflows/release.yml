@@ -55,6 +55,12 @@ jobs:
           pip install piston_rspy --no-index --find-links dist --force-reinstall
           cd dist && python3 -c "import piston_rspy"
 
+      - name: Upload wheels
+        uses: actions/upload-artifact@v3
+        with:
+          name: wheels
+          path: dist
+
   macos-universal2:
     runs-on: macos-latest
     steps:
