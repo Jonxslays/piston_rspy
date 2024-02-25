@@ -1,9 +1,6 @@
 name: Build
 
 on:
-  push:
-    branches:
-      - task/update-builds # TODO: Remove this before final PR
   pull_request:
   release:
     types: [published]
@@ -13,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check project version
-        if: "startsWith(github.ref, 'refs/tags/')"
+        if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
         run: |
           latest=$(git tag -l | tail -1)
           cargo_v=$(grep -m 1 -oP 'version = "(.*)"' Cargo.toml | sed -rn 's/.*"(.*)"/v\1/p')
