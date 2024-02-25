@@ -1,9 +1,6 @@
 name: Build
 
 on:
-  push:
-    branches:
-      - task/update-builds # TODO: Remove this before final PR
   pull_request:
   release:
     types: [published]
@@ -29,7 +26,7 @@ jobs:
 
           echo "Tags match: $latest" && exit 0
 
-  macos:
+  macos-x86:
     runs-on: macos-latest
     steps:
       - name: Checkout code
@@ -54,6 +51,21 @@ jobs:
         run: |
           pip install piston_rspy --no-index --find-links dist --force-reinstall
           cd dist && python3 -c "import piston_rspy"
+
+  macos-universal2:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+          architecture: x64
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
 
       - name: Build wheels - universal2
         uses: PyO3/maturin-action@v1
