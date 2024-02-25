@@ -137,6 +137,8 @@ jobs:
         if: matrix.target == 'x86_64'
         run: |
           pip install piston_rspy --no-index --find-links dist --force-reinstall
+          ls -lah /home/runner/work/piston_rspy/piston_rspy
+          ls -lah /home/runner/work/piston_rspy/piston_rspy/piston_rspy
           python -c "import piston_rspy"
 
       - name: Upload wheels
@@ -180,6 +182,8 @@ jobs:
             pip3 install -U pip
           run: |
             pip3 install piston_rspy --no-index --find-links dist/ --force-reinstall
+            ls -lah /home/runner/work/piston_rspy/piston_rspy
+            ls -lah /home/runner/work/piston_rspy/piston_rspy/piston_rspy
             python3 -c "import piston_rspy"
 
       - name: Upload wheels
@@ -222,6 +226,8 @@ jobs:
             apk add py3-pip
             pip3 install -U pip
             pip3 install piston_rspy --no-index --find-links /io/dist/ --force-reinstall
+            ls -lah /home/runner/work/piston_rspy/piston_rspy
+            ls -lah /home/runner/work/piston_rspy/piston_rspy/piston_rspy
             python3 -c "import piston_rspy"
 
       - name: Upload wheels
