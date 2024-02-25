@@ -53,7 +53,7 @@ jobs:
       - name: Install built wheel - x86_64
         run: |
           pip install piston_rspy --no-index --find-links dist --force-reinstall
-          python -c "import piston_rspy"
+          cd dist && python3 -c "import piston_rspy"
 
       - name: Build wheels - universal2
         uses: PyO3/maturin-action@v1
@@ -64,7 +64,7 @@ jobs:
       - name: Install built wheel - universal2
         run: |
           pip install piston_rspy --no-index --find-links dist --force-reinstall
-          python -c "import piston_rspy"
+          cd dist && python3 -c "import piston_rspy"
 
       - name: Upload wheels
         uses: actions/upload-artifact@v3
@@ -101,7 +101,7 @@ jobs:
       - name: Install built wheel - ${{ matrix.target }}
         run: |
           pip install piston_rspy --no-index --find-links dist --force-reinstall
-          python -c "import piston_rspy"
+          cd dist && python3 -c "import piston_rspy"
 
       - name: Upload wheels
         uses: actions/upload-artifact@v3
@@ -137,9 +137,7 @@ jobs:
         if: matrix.target == 'x86_64'
         run: |
           pip install piston_rspy --no-index --find-links dist --force-reinstall
-          ls -lah /home/runner/work/piston_rspy/piston_rspy
-          ls -lah /home/runner/work/piston_rspy/piston_rspy/piston_rspy
-          python -c "import piston_rspy"
+          cd dist && python3 -c "import piston_rspy"
 
       - name: Upload wheels
         uses: actions/upload-artifact@v3
@@ -182,9 +180,7 @@ jobs:
             pip3 install -U pip
           run: |
             pip3 install piston_rspy --no-index --find-links dist/ --force-reinstall
-            ls -lah /home/runner/work/piston_rspy/piston_rspy
-            ls -lah /home/runner/work/piston_rspy/piston_rspy/piston_rspy
-            python3 -c "import piston_rspy"
+            cd dist && python3 -c "import piston_rspy"
 
       - name: Upload wheels
         uses: actions/upload-artifact@v3
@@ -226,9 +222,7 @@ jobs:
             apk add py3-pip
             pip3 install -U pip
             pip3 install piston_rspy --no-index --find-links /io/dist/ --force-reinstall
-            ls -lah /home/runner/work/piston_rspy/piston_rspy
-            ls -lah /home/runner/work/piston_rspy/piston_rspy/piston_rspy
-            python3 -c "import piston_rspy"
+            cd dist && python3 -c "import piston_rspy"
 
       - name: Upload wheels
         uses: actions/upload-artifact@v3
