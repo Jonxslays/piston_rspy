@@ -168,11 +168,11 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.target }}
-          manylinux: auto
+          manylinux: 2_28
           args: --release -i 3.8 3.9 3.10 3.11 3.12 -o dist
 
       - name: Install built wheel - ${{ matrix.target }}
-        uses: uraimo/run-on-arch-action@v2.7.1
+        uses: uraimo/run-on-arch-action@v2.6.0
         if: matrix.target != 'ppc64'
         with:
           arch: ${{ matrix.target }}
@@ -264,7 +264,7 @@ jobs:
           args: --release -i 3.8 3.9 3.10 3.11 3.12 -o dist
 
       - name: Install built wheel - ${{ matrix.platform.arch }}
-        uses: uraimo/run-on-arch-action@v2.7.1
+        uses: uraimo/run-on-arch-action@v2.6.0
         with:
           arch: ${{ matrix.platform.arch }}
           distro: alpine_latest
