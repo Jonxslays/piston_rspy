@@ -1,6 +1,6 @@
 [project]
 name = "piston_rspy"
-version = "0.4.1"
+version = "0.4.2"
 description = "Python bindings for piston_rs."
 requires-python = ">=3.8,<3.13"
 authors = [{ name = "Jonxslays" }]
