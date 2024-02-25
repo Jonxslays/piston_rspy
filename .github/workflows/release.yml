@@ -1,6 +1,9 @@
 name: Build
 
 on:
+  push:
+    branches:
+      - task/update-builds # TODO: Remove this before final PR
   pull_request:
   release:
     types: [published]
