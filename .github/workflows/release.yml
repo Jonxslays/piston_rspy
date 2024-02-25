@@ -220,9 +220,11 @@ jobs:
           options: -v ${{ github.workspace }}:/io -w /io
           run: |
             apk add py3-pip
+            python3 -m venv .venv
+            source .venv/bin/activate
             pip3 install -U pip
             pip3 install piston_rspy --no-index --find-links /io/dist/ --force-reinstall
-            cd dist && python3 -c "import piston_rspy"
+            cd /io/dist/ && python3 -c "import piston_rspy"
 
       - name: Upload wheels
         uses: actions/upload-artifact@v3
