@@ -1,5 +1,4 @@
 use pyo3::prelude::*;
-use pyo3::PyObjectProtocol;
 use std::collections::HashMap;
 
 use piston_rs::Client as Client_;
@@ -22,21 +21,6 @@ pub struct Client {
     headers: HashMap<String, String>,
 }
 
-#[pyproto]
-impl PyObjectProtocol for Client {
-    fn __repr__(&self) -> PyResult<String> {
-        Ok(format!(
-            "Client {{ url: \"{}\", headers: {:?} }}",
-            self.url(),
-            self.headers,
-        ))
-    }
-
-    fn __str__(&self) -> PyResult<String> {
-        self.__repr__()
-    }
-}
-
 #[pymethods]
 impl Client {
     /// Creates a new client.
@@ -50,6 +34,18 @@ impl Client {
             .collect();
 
         Self { inner, headers }
+    }
+
+    fn __repr__(&self) -> PyResult<String> {
+        Ok(format!(
+            "Client {{ url: \"{}\", headers: {:?} }}",
+            self.url(),
+            self.headers,
+        ))
+    }
+
+    fn __str__(&self) -> PyResult<String> {
+        self.__repr__()
     }
 
     /// Creates a new Client with a custom url and an api key.
@@ -130,30 +126,10 @@ impl Client {
         self.inner.get_url()
     }
 
-    /// The base url for the Piston v2 api.
-    ///
-    /// ### Returns:
-    ///
-    /// - `str`: The url.
-    #[pyo3(text_signature = "(self) -> str")]
-    fn get_url(&self) -> String {
-        self.url()
-    }
-
     /// `dict[str, str]`: The headers being sent with requests.
     #[getter]
     fn headers(&self) -> HashMap<String, String> {
         self.headers.clone()
-    }
-
-    /// The headers being sent with requests.
-    ///
-    /// ### Returns:
-    ///
-    /// - `dict[str, str]`: The headers.
-    #[pyo3(text_signature = "(self) -> dict[str, str]")]
-    fn get_headers(&self) -> HashMap<String, String> {
-        self.headers()
     }
 
     /// **async**: Fetches the runtimes from Piston. This is an http request.

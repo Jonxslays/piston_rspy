@@ -1,6 +1,5 @@
 use pyo3::exceptions::PyTypeError;
 use pyo3::prelude::*;
-use pyo3::PyObjectProtocol;
 
 use piston_rs::ExecResponse as ExecResponse_;
 use piston_rs::ExecResult as ExecResult_;
@@ -18,17 +17,6 @@ use super::File;
 #[derive(Clone)]
 pub struct ExecResult {
     inner: ExecResult_,
-}
-
-#[pyproto]
-impl PyObjectProtocol for ExecResult {
-    fn __repr__(&self) -> PyResult<String> {
-        Ok(format!("{:?}", self.inner))
-    }
-
-    fn __str__(&self) -> PyResult<String> {
-        self.__repr__()
-    }
 }
 
 impl ExecResult {
@@ -65,6 +53,14 @@ impl ExecResult {
     /// Raises a TypeError because this class cannot be instantiated.
     fn new_() -> PyResult<Self> {
         Err(PyTypeError::new_err("ExecResult can not be instantiated"))
+    }
+
+    fn __repr__(&self) -> PyResult<String> {
+        Ok(format!("{:?}", self.inner))
+    }
+
+    fn __str__(&self) -> PyResult<String> {
+        self.__repr__()
     }
 
     /// `str`: The text sent to `stdout` during execution.
@@ -137,23 +133,20 @@ impl ExecResponse {
     }
 }
 
-#[pyproto]
-impl PyObjectProtocol for ExecResponse {
-    fn __repr__(&self) -> PyResult<String> {
-        Ok(format!("{:?}", self.inner))
-    }
-
-    fn __str__(&self) -> PyResult<String> {
-        self.__repr__()
-    }
-}
-
 #[pymethods]
 impl ExecResponse {
     #[new]
     /// Raises a TypeError because this class cannot be instantiated.
     fn new_() -> PyResult<Self> {
         Err(PyTypeError::new_err("ExecResponse can not be instantiated"))
+    }
+
+    fn __repr__(&self) -> PyResult<String> {
+        Ok(format!("{:?}", self.inner))
+    }
+
+    fn __str__(&self) -> PyResult<String> {
+        self.__repr__()
     }
 
     /// `str`: The language that was used.
@@ -231,31 +224,20 @@ impl Executor {
     }
 }
 
-#[pyproto]
-impl PyObjectProtocol for Executor {
-    fn __repr__(&self) -> PyResult<String> {
-        Ok(format!("{:?}", self.inner))
-    }
-
-    fn __str__(&self) -> PyResult<String> {
-        self.__repr__()
-    }
-}
-
 #[pymethods]
 impl Executor {
     #[new]
-    #[args(
-        language = "\"\".to_string()",
-        version = "\"*\".to_string()",
-        files = "vec![]",
-        stdin = "\"\".to_string()",
-        args = "vec![]",
-        compile_timeout = "10000",
-        run_timeout = "3000",
-        compile_memory_limit = "-1",
-        run_memory_limit = "-1"
-    )]
+    #[pyo3(signature = (
+        language = "".to_string(),
+        version = "*".to_string(),
+        files = vec![],
+        stdin = "".to_string(),
+        args = vec![],
+        compile_timeout = 10000,
+        run_timeout = 3000,
+        compile_memory_limit = -1,
+        run_memory_limit = -1
+    ))]
     #[allow(clippy::too_many_arguments)]
     fn new(
         language: String,
@@ -281,6 +263,14 @@ impl Executor {
                 run_memory_limit,
             },
         }
+    }
+
+    fn __repr__(&self) -> PyResult<String> {
+        Ok(format!("{:?}", self.inner))
+    }
+
+    fn __str__(&self) -> PyResult<String> {
+        self.__repr__()
     }
 
     /// `str`: The language to use for execution.
